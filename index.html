@@ -74,16 +74,29 @@ button{font:inherit; color:inherit; cursor:pointer}
 .zy{display:inline-flex; align-items:flex-start; line-height:1.08; vertical-align:baseline}
 .zy-c{line-height:1.08}
 .zy-r{
-  display:inline-flex; align-items:flex-end; margin:0 .06em;
+  display:inline-flex; align-items:flex-end; margin:0 .05em;
   font-weight:400; color:var(--ink-3);
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   -webkit-user-select:none; user-select:none;
 }
 .zy-r.light{flex-direction:column; align-items:center}      /* 輕聲：點在符號上方 */
-.zy-s{display:flex; flex-direction:column; align-items:center; font-size:max(9px,.46em)}
+.zy-s{display:flex; flex-direction:column; align-items:center; font-size:.42em}
 .zy-s i{display:block; font-style:normal; line-height:1.04}
-.zy-t{font-size:max(9px,.46em); line-height:.62; margin-left:.02em}  /* 聲調：符號右下 */
+.zy-t{font-size:.42em; line-height:.66; margin-left:.03em}  /* 聲調：符號右下 */
 .zy-r.light .zy-t{line-height:.34; margin:0 0 .04em 0}
+/* 開注音時把內文字級調大，比例才不會犧牲可讀性 */
+body.zy-on{font-size:17px; line-height:1.75}
+body.zy-on .note,body.zy-on .page-head p,body.zy-on .hero-text p,body.zy-on .kv-row .kv-v,
+body.zy-on .goal-list,body.zy-on .word .w-zh,body.zy-on .wordlist.compact .w-zh,
+body.zy-on .sent .sz,body.zy-on .week-hero .wk-u,body.zy-on .sentence-box .s-zh,
+body.zy-on .rmain .rt,body.zy-on .week-hero h2{font-size:16px}
+body.zy-on .muted,body.zy-on .rmain .rs,body.zy-on .rmain .rw,body.zy-on .subj-main .subj-desc,
+body.zy-on .item .is,body.zy-on .field label,body.zy-on .crumb,body.zy-on .sec > h3,
+body.zy-on .btn.small,body.zy-on .week-hero .wk-d,body.zy-on .feedback,
+body.zy-on .fc .fc-hint,body.zy-on .ptable{font-size:14px}
+body.zy-on .eyebrow,body.zy-on .qkind,body.zy-on .rtag,body.zy-on .chip-soon,
+body.zy-on .pill,body.zy-on .ptable th,body.zy-on .kv-row .kv-k,body.zy-on .footer,
+body.zy-on .tag,body.zy-on .exam-flag{font-size:12.5px}
 .zybtn{
   flex:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
   border-radius:999px; padding:5px 11px; font-size:13px; min-height:40px; font-weight:700;
