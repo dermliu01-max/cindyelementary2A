@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
-<body style="margin:0">
+<body>
 <title>Cindy 的小二複習站</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,6 +69,27 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 .en{font-family:var(--font-en)}
 .shell{max-width:900px; margin:0 auto; padding:0 16px 72px}
+
+/* ---------- 注音 ---------- */
+.zy{display:inline-flex; align-items:flex-start; line-height:1.1; vertical-align:baseline}
+.zy-r{
+  font-size:max(10px,.5em); line-height:1.05; margin-left:.06em; margin-right:.05em;
+  writing-mode:vertical-rl; text-orientation:upright; text-align:start;
+  font-weight:400; letter-spacing:0; color:var(--ink-3);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  -webkit-user-select:none; user-select:none;
+}
+body.zy-on{line-height:2}
+body.zy-on .page-head h2,body.zy-on .hero-text h2,body.zy-on .qtext,
+body.zy-on .fc .fc-main,body.zy-on .sp-target .zh{line-height:1.6}
+body.zy-on .brand h1{line-height:1.5}
+body.zy-on .rmain .rw{line-height:1.4}
+.zybtn{
+  flex:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
+  border-radius:999px; padding:5px 11px; font-size:13px; min-height:40px; font-weight:700;
+  letter-spacing:.04em;
+}
+.zybtn[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
 
 /* ---------- top bar ---------- */
 .topbar{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--line)}
@@ -273,7 +294,9 @@ button{font:inherit; color:inherit; cursor:pointer}
 .ptable th{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
 .ptable td.num{text-align:right; font-variant-numeric:tabular-nums}
 .scroll-x{overflow-x:auto}
-.pill{display:inline-block; font-size:12px; padding:2px 9px; border-radius:999px; font-weight:700}
+.pill{display:inline-block; font-size:12px; padding:2px 9px; border-radius:999px; font-weight:700; white-space:nowrap}
+.ptable td,.ptable th{white-space:nowrap}
+.ptable td:first-child{white-space:normal; min-width:130px}
 .pill.ok{background:var(--good-soft); color:var(--good)}
 .pill.mid{background:var(--gold-soft); color:var(--gold)}
 .pill.no{background:var(--surface-2); color:var(--ink-3)}
@@ -307,7 +330,7 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 <header class="topbar">
   <div class="topbar-in">
-    <div class="brand">
+    <div class="brand" data-nozy>
       <div class="mark">C</div>
       <div>
         <h1>Cindy 的小二複習站</h1>
@@ -315,6 +338,7 @@ button{font:inherit; color:inherit; cursor:pointer}
       </div>
     </div>
     <nav class="topnav" id="topnav">
+      <button class="zybtn" id="zytoggle" aria-pressed="true" title="顯示或隱藏注音">ㄅㄆㄇ</button>
       <button data-go="home">首頁</button>
       <button data-go="progress">進度</button>
       <button data-go="parent">家長區</button>
@@ -327,6 +351,18 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 <script>
 "use strict";
+
+/* ============================================================
+   跨裝置同步設定（放在 GitHub 上時才需要）
+   ------------------------------------------------------------
+   把 Firebase Realtime Database 的網址貼在下面雙引號中間，
+   進度就會在手機、平板、電腦之間自動同步。
+   網址長得像：
+   https://你的專案-default-rtdb.asia-southeast1.firebasedatabase.app/cindy.json
+   留空白則只存在這台裝置（仍可用「備份碼」手動搬移）。
+   在 Claude 的線上版不需要設定，那邊本來就會同步。
+   ============================================================ */
+const SYNC_URL = "";
 
 /* ============================================================
    學校資料 —— 再興小學 115 學年度第一學期 二年級英語
@@ -675,36 +711,83 @@ const UNITS = [
 
 const state = {
   view:"home", subject:null, unit:null, week:null, tab:"ref", entab:"week",
-  progress:{}, custom:{words:[], questions:[]}, db:null
+  progress:{}, custom:{words:[], questions:[]}, db:null,
+  updatedAt:0, sync:SYNC_URL ? "connecting" : "off"
 };
 const LS_KEY = "cindy-study-v2";
 
+function snapshot(){
+  return {progress:state.progress, custom:state.custom, updatedAt:state.updatedAt};
+}
+function applySnapshot(o){
+  if(!o || typeof o !== "object") return false;
+  state.progress = o.progress || {};
+  state.custom = {words:(o.custom && o.custom.words) || [], questions:(o.custom && o.custom.questions) || []};
+  state.updatedAt = o.updatedAt || 0;
+  return true;
+}
 function loadLocal(){
   try{
     const raw = localStorage.getItem(LS_KEY);
-    if(raw){
-      const o = JSON.parse(raw);
-      state.progress = o.progress || {};
-      state.custom = o.custom || {words:[], questions:[]};
-    }
+    if(raw) applySnapshot(JSON.parse(raw));
   }catch(e){}
 }
 function saveLocal(){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify({progress:state.progress, custom:state.custom})); }catch(e){}
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(snapshot())); }catch(e){}
 }
+
+/* 自架同步：Firebase Realtime Database 的 REST 介面，不需要任何 SDK */
+async function pullRemote(){
+  if(!SYNC_URL) return null;
+  const res = await fetch(SYNC_URL, {cache:"no-store"});
+  if(!res.ok) throw new Error("HTTP " + res.status);
+  return await res.json();
+}
+async function pushRemote(){
+  if(!SYNC_URL) return;
+  const res = await fetch(SYNC_URL, {
+    method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(snapshot())
+  });
+  if(!res.ok) throw new Error("HTTP " + res.status);
+}
+async function syncNow(loud){
+  if(!SYNC_URL) return;
+  try{
+    const remote = await pullRemote();
+    if(remote && (remote.updatedAt || 0) > state.updatedAt){
+      applySnapshot(remote); saveLocal();
+      state.sync = "ok";
+      if(loud) toast("已從雲端取得較新的進度");
+      render();
+      return;
+    }
+    await pushRemote();
+    state.sync = "ok";
+    if(loud){ toast("同步完成"); render(); }
+  }catch(e){
+    state.sync = "error";
+    if(loud){ toast("同步失敗，請檢查同步網址"); render(); }
+  }
+}
+
 let saveTimer = null;
 function save(){
+  state.updatedAt = Date.now();
   saveLocal();
-  if(!state.db) return;
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async ()=>{
-    try{
-      await state.db.doc("study/progress").set({units:state.progress, updatedAt:new Date().toISOString()});
-      await state.db.doc("study/custom").set({words:state.custom.words, questions:state.custom.questions});
-    }catch(e){
-      toast(e && e.code === "quota_exceeded" ? "儲存空間已滿，請先刪掉一些自訂題目" : "這次沒存到雲端，資料留在這台裝置");
+    if(state.db){
+      try{
+        await state.db.doc("study/progress").set({units:state.progress, updatedAt:new Date().toISOString()});
+        await state.db.doc("study/custom").set({words:state.custom.words, questions:state.custom.questions});
+      }catch(e){
+        toast(e && e.code === "quota_exceeded" ? "儲存空間已滿，請先刪掉一些自訂題目" : "這次沒存到雲端，資料留在這台裝置");
+      }
     }
-  }, 400);
+    if(SYNC_URL){
+      try{ await pushRemote(); state.sync = "ok"; }catch(e){ state.sync = "error"; }
+    }
+  }, 600);
 }
 async function initDb(){
   if(!window.claude || typeof window.claude.use !== "function") return;
@@ -805,6 +888,81 @@ function unitAllWords(u){
 const ALL_SCHOOL_WORDS = (()=>{ const a=[]; WEEKS.forEach(w => w.words.forEach(p => a.push({en:p[0], zh:p[1]}))); return a; })();
 
 /* ============================================================
+   注音（ㄅㄆㄇ）
+   c：每個字的預設讀音；p：多音字詞的讀音（以台灣課本讀法校正）
+   ============================================================ */
+const ZY = {"c":{"一":"ㄧ","七":"ㄑㄧ","三":"ㄙㄢ","上":"ㄕㄤˋ","下":"ㄒㄧㄚˋ","不":"ㄅㄨˋ","世":"ㄕˋ","丟":"ㄉㄧㄡ","並":"ㄅㄧㄥˋ","中":"ㄓㄨㄥ","主":"ㄓㄨˇ","之":"ㄓ","乘":"ㄔㄥˊ","九":"ㄐㄧㄡˇ","也":"ㄧㄝˇ","了":"ㄌㄜ˙","事":"ㄕˋ","二":"ㄦˋ","五":"ㄨˇ","些":"ㄒㄧㄝ","人":"ㄖㄣˊ","什":"ㄕㄣˊ","今":"ㄐㄧㄣ","介":"ㄐㄧㄝˋ","仍":"ㄖㄥˊ","仔":"ㄗㄞˇ","他":"ㄊㄚ","代":"ㄉㄞˋ","以":"ㄧˇ","件":"ㄐㄧㄢˋ","任":"ㄖㄣˋ","份":"ㄈㄣˋ","企":"ㄑㄧˋ","位":"ㄨㄟˋ","住":"ㄓㄨˋ","何":"ㄏㄜˊ","作":"ㄗㄨㄛˋ","你":"ㄋㄧˇ","使":"ㄕˇ","來":"ㄌㄞˊ","例":"ㄌㄧˋ","依":"ㄧ","保":"ㄅㄠˇ","修":"ㄒㄧㄡ","個":"ㄍㄜˋ","們":"ㄇㄣ˙","候":"ㄏㄡˋ","倦":"ㄐㄩㄢˋ","假":"ㄐㄧㄚˋ","做":"ㄗㄨㄛˋ","健":"ㄐㄧㄢˋ","偶":"ㄡˇ","傍":"ㄅㄤˋ","傘":"ㄙㄢˇ","備":"ㄅㄟˋ","傳":"ㄔㄨㄢˊ","傻":"ㄕㄚˇ","像":"ㄒㄧㄤˋ","優":"ㄧㄡ","儲":"ㄔㄨˇ","元":"ㄩㄢˊ","兄":"ㄒㄩㄥ","先":"ㄒㄧㄢ","光":"ㄍㄨㄤ","克":"ㄎㄜˋ","入":"ㄖㄨˋ","內":"ㄋㄟˋ","全":"ㄑㄩㄢˊ","兩":"ㄌㄧㄤˇ","八":"ㄅㄚ","公":"ㄍㄨㄥ","六":"ㄌㄧㄡˋ","共":"ㄍㄨㄥˋ","其":"ㄑㄧˊ","具":"ㄐㄩˋ","典":"ㄉㄧㄢˇ","再":"ㄗㄞˋ","冰":"ㄅㄧㄥ","冷":"ㄌㄥˇ","出":"ㄔㄨ","刀":"ㄉㄠ","分":"ㄈㄣ","別":"ㄅㄧㄝˊ","利":"ㄌㄧˋ","刪":"ㄕㄢ","到":"ㄉㄠˋ","刷":"ㄕㄨㄚ","則":"ㄗㄜˊ","前":"ㄑㄧㄢˊ","剪":"ㄐㄧㄢˇ","副":"ㄈㄨˋ","力":"ㄌㄧˋ","加":"ㄐㄧㄚ","助":"ㄓㄨˋ","努":"ㄋㄨˇ","動":"ㄉㄨㄥˋ","勾":"ㄍㄡ","包":"ㄅㄠ","北":"ㄅㄟˇ","區":"ㄑㄩ","十":"ㄕˊ","午":"ㄨˇ","卡":"ㄎㄚˇ","即":"ㄐㄧˊ","卷":"ㄐㄩㄢˋ","原":"ㄩㄢˊ","厲":"ㄌㄧˋ","去":"ㄑㄩˋ","及":"ㄐㄧˊ","友":"ㄧㄡˇ","反":"ㄈㄢˇ","叔":"ㄕㄨ","取":"ㄑㄩˇ","口":"ㄎㄡˇ","句":"ㄐㄩˋ","另":"ㄌㄧㄥˋ","只":"ㄓˇ","可":"ㄎㄜˇ","台":"ㄊㄞˊ","司":"ㄙ","吃":"ㄔ","各":"ㄍㄜˋ","合":"ㄏㄜˊ","吊":"ㄉㄧㄠˋ","同":"ㄊㄨㄥˊ","名":"ㄇㄧㄥˊ","否":"ㄈㄡˇ","吧":"ㄅㄚ˙","呵":"ㄏㄜ","呼":"ㄏㄨ","和":"ㄏㄢˋ","品":"ㄆㄧㄣˇ","員":"ㄩㄢˊ","哪":"ㄋㄚˇ","哭":"ㄎㄨ","唸":"ㄋㄧㄢˋ","問":"ㄨㄣˋ","喜":"ㄒㄧˇ","喝":"ㄏㄜ","單":"ㄉㄢ","嗎":"ㄇㄚ˙","噓":"ㄒㄩ","囉":"ㄌㄨㄛ","四":"ㄙˋ","回":"ㄏㄨㄟˊ","國":"ㄍㄨㄛˊ","圍":"ㄨㄟˊ","圖":"ㄊㄨˊ","在":"ㄗㄞˋ","地":"ㄉㄧˋ","址":"ㄓˇ","型":"ㄒㄧㄥˊ","堂":"ㄊㄤˊ","堅":"ㄐㄧㄢ","堡":"ㄅㄠˇ","報":"ㄅㄠˋ","場":"ㄔㄤˇ","填":"ㄊㄧㄢˊ","壁":"ㄅㄧˋ","外":"ㄨㄞˋ","多":"ㄉㄨㄛ","夠":"ㄍㄡˋ","大":"ㄉㄚˋ","天":"ㄊㄧㄢ","太":"ㄊㄞˋ","夫":"ㄈㄨ","失":"ㄕ","夾":"ㄐㄧㄚˊ","奇":"ㄑㄧˊ","套":"ㄊㄠˋ","奮":"ㄈㄣˋ","奶":"ㄋㄞˇ","她":"ㄊㄚ","好":"ㄏㄠˇ","如":"ㄖㄨˊ","妹":"ㄇㄟˋ","姊":"ㄗˇ","始":"ㄕˇ","姑":"ㄍㄨ","姨":"ㄧˊ","婆":"ㄆㄛˊ","媽":"ㄇㄚ","子":"ㄗ˙","字":"ㄗˋ","存":"ㄘㄨㄣˊ","孩":"ㄏㄞˊ","學":"ㄒㄩㄝˊ","守":"ㄕㄡˇ","安":"ㄢ","完":"ㄨㄢˊ","定":"ㄉㄧㄥˋ","室":"ㄕˋ","害":"ㄏㄞˋ","家":"ㄐㄧㄚ","容":"ㄖㄨㄥˊ","察":"ㄔㄚˊ","寫":"ㄒㄧㄝˇ","寶":"ㄅㄠˇ","專":"ㄓㄨㄢ","尊":"ㄗㄨㄣ","對":"ㄉㄨㄟˋ","小":"ㄒㄧㄠˇ","少":"ㄕㄠˇ","尖":"ㄐㄧㄢ","尚":"ㄕㄤˋ","就":"ㄐㄧㄡˋ","尾":"ㄨㄟˇ","層":"ㄘㄥˊ","工":"ㄍㄨㄥ","巨":"ㄐㄩˋ","差":"ㄔㄚˋ","己":"ㄐㄧˇ","已":"ㄧˇ","巴":"ㄅㄚ˙","市":"ㄕˋ","師":"ㄕ","帶":"ㄉㄞˋ","帽":"ㄇㄠˋ","幅":"ㄈㄨˊ","幫":"ㄅㄤ","平":"ㄆㄧㄥˊ","年":"ㄋㄧㄢˊ","幾":"ㄐㄧˇ","床":"ㄔㄨㄤˊ","序":"ㄒㄩˋ","度":"ㄉㄨˋ","庭":"ㄊㄧㄥˊ","康":"ㄎㄤ","廚":"ㄔㄨˊ","廳":"ㄊㄧㄥ","式":"ㄕˋ","引":"ㄧㄣˇ","弟":"ㄉㄧˋ","張":"ㄓㄤ","形":"ㄒㄧㄥˊ","彩":"ㄘㄞˇ","影":"ㄧㄥˇ","待":"ㄉㄞˋ","很":"ㄏㄣˇ","後":"ㄏㄡˋ","得":"ㄉㄜ˙","從":"ㄘㄨㄥˊ","微":"ㄨㄟˊ","徵":"ㄓˇ","心":"ㄒㄧㄣ","忘":"ㄨㄤˋ","忙":"ㄇㄤˊ","念":"ㄋㄧㄢˋ","怕":"ㄆㄚˋ","思":"ㄙ˙","情":"ㄑㄧㄥˊ","想":"ㄒㄧㄤˇ","意":"ㄧˋ","愛":"ㄞˋ","感":"ㄍㄢˇ","態":"ㄊㄞˋ","慢":"ㄇㄢˋ","懂":"ㄉㄨㄥˇ","應":"ㄧㄥ","成":"ㄔㄥˊ","我":"ㄨㄛˇ","或":"ㄏㄨㄛˋ","戰":"ㄓㄢˋ","戲":"ㄒㄧˋ","戶":"ㄏㄨˋ","房":"ㄈㄤˊ","所":"ㄙㄨㄛˇ","手":"ㄕㄡˇ","才":"ㄘㄞˊ","打":"ㄉㄚˇ","扶":"ㄈㄨˊ","找":"ㄓㄠˇ","把":"ㄅㄚˇ","抓":"ㄓㄨㄚ","抽":"ㄔㄡ","拍":"ㄆㄞ","拜":"ㄅㄞˋ","拼":"ㄆㄧㄣ","持":"ㄔˊ","指":"ㄓˇ","按":"ㄢˋ","挑":"ㄊㄧㄠ","捉":"ㄓㄨㄛ","掃":"ㄙㄠˇ","掉":"ㄉㄧㄠˋ","排":"ㄆㄞˊ","接":"ㄐㄧㄝ","描":"ㄇㄧㄠˊ","提":"ㄊㄧˊ","換":"ㄏㄨㄢˋ","搖":"ㄧㄠˊ","搬":"ㄅㄢ","摘":"ㄓㄞ","擇":"ㄗㄜˊ","擎":"ㄑㄧㄥˊ","擔":"ㄉㄢ","據":"ㄐㄩˋ","擦":"ㄘㄚ","攀":"ㄆㄢ","收":"ㄕㄡ","放":"ㄈㄤˋ","敗":"ㄅㄞˋ","教":"ㄐㄧㄠˋ","整":"ㄓㄥˇ","數":"ㄕㄨˋ","文":"ㄨㄣˊ","斑":"ㄅㄢ","料":"ㄌㄧㄠˋ","新":"ㄒㄧㄣ","方":"ㄈㄤ","於":"ㄩˊ","旁":"ㄆㄤˊ","族":"ㄗㄨˊ","日":"ㄖˋ","旨":"ㄓˇ","早":"ㄗㄠˇ","明":"ㄇㄧㄥˊ","星":"ㄒㄧㄥ","是":"ㄕˋ","時":"ㄕˊ","晚":"ㄨㄢˇ","晴":"ㄑㄧㄥˊ","暖":"ㄋㄨㄢˇ","暫":"ㄗㄢˋ","更":"ㄍㄥˋ","書":"ㄕㄨ","最":"ㄗㄨㄟˋ","會":"ㄏㄨㄟˋ","有":"ㄧㄡˇ","朋":"ㄆㄥˊ","服":"ㄈㄨˊ","朗":"ㄌㄤˇ","期":"ㄑㄧˊ","未":"ㄨㄟˋ","末":"ㄇㄛˋ","本":"ㄅㄣˇ","材":"ㄘㄞˊ","東":"ㄉㄨㄥ","板":"ㄅㄢˇ","果":"ㄍㄨㄛˇ","架":"ㄐㄧㄚˋ","查":"ㄔㄚˊ","校":"ㄒㄧㄠˋ","根":"ㄍㄣ","格":"ㄍㄜˊ","框":"ㄎㄨㄤ","案":"ㄢˋ","梯":"ㄊㄧ","棒":"ㄅㄤˋ","椅":"ㄧˇ","植":"ㄓˊ","椒":"ㄐㄧㄠ","業":"ㄧㄝˋ","槽":"ㄘㄠˊ","樂":"ㄌㄜˋ","樓":"ㄌㄡˊ","標":"ㄅㄧㄠ","樣":"ㄧㄤˋ","機":"ㄐㄧ","檢":"ㄐㄧㄢˇ","櫃":"ㄍㄨㄟˋ","欠":"ㄑㄧㄢˋ","次":"ㄘˋ","歌":"ㄍㄜ","歡":"ㄏㄨㄢ","正":"ㄓㄥˋ","步":"ㄅㄨˋ","歲":"ㄙㄨㄟˋ","段":"ㄉㄨㄢˋ","母":"ㄇㄨˇ","每":"ㄇㄟˇ","比":"ㄅㄧˇ","毛":"ㄇㄠˊ","毯":"ㄊㄢˇ","氣":"ㄑㄧˋ","水":"ㄕㄨㄟˇ","求":"ㄑㄧㄡˊ","沒":"ㄇㄟˊ","河":"ㄏㄜˊ","法":"ㄈㄚˇ","波":"ㄅㄛ","泳":"ㄩㄥˇ","洋":"ㄧㄤˊ","洗":"ㄒㄧˇ","活":"ㄏㄨㄛˊ","流":"ㄌㄧㄡˊ","浴":"ㄩˋ","海":"ㄏㄞˇ","消":"ㄒㄧㄠ","淇":"ㄑㄧˊ","淋":"ㄌㄧㄣˊ","混":"ㄏㄨㄣˋ","清":"ㄑㄧㄥ","減":"ㄐㄧㄢˇ","測":"ㄘㄜˋ","渴":"ㄎㄜˇ","源":"ㄩㄢˊ","準":"ㄓㄨㄣˇ","溜":"ㄌㄧㄡ","滑":"ㄏㄨㄚˊ","滾":"ㄍㄨㄣˇ","滿":"ㄇㄢˇ","漢":"ㄏㄢˋ","潔":"ㄐㄧㄝˊ","為":"ㄨㄟˊ","無":"ㄨˊ","然":"ㄖㄢˊ","照":"ㄓㄠˋ","煮":"ㄓㄨˇ","熟":"ㄕㄡˊ","熱":"ㄖㄜˋ","爐":"ㄌㄨˊ","爪":"ㄓㄨㄚˇ","爬":"ㄆㄚˊ","爸":"ㄅㄚˋ","爺":"ㄧㄝˊ","片":"ㄆㄧㄢ","版":"ㄅㄢˇ","牙":"ㄧㄚˊ","牛":"ㄋㄧㄡˊ","牠":"ㄊㄚ","物":"ㄨˋ","特":"ㄊㄜˋ","狀":"ㄓㄨㄤˋ","猴":"ㄏㄡˊ","獅":"ㄕ","獸":"ㄕㄡˋ","率":"ㄌㄩˋ","玉":"ㄩˋ","玩":"ㄨㄢˊ","班":"ㄅㄢ","現":"ㄒㄧㄢˋ","球":"ㄑㄧㄡˊ","理":"ㄌㄧˇ","琴":"ㄑㄧㄣˊ","甜":"ㄊㄧㄢˊ","生":"ㄕㄥ","產":"ㄔㄢˇ","用":"ㄩㄥˋ","由":"ㄧㄡˊ","界":"ㄐㄧㄝˋ","留":"ㄌㄧㄡˊ","略":"ㄌㄩㄝˋ","番":"ㄈㄢ","畫":"ㄏㄨㄚˋ","疑":"ㄧˊ","疲":"ㄆㄧˊ","發":"ㄈㄚ","白":"ㄅㄞˊ","的":"ㄉㄜ˙","皺":"ㄓㄡˋ","盒":"ㄏㄜˊ","盪":"ㄉㄤˋ","目":"ㄇㄨˋ","直":"ㄓˊ","眉":"ㄇㄟˊ","看":"ㄎㄢˋ","真":"ㄓㄣ","睡":"ㄕㄨㄟˋ","知":"ㄓ","短":"ㄉㄨㄢˇ","確":"ㄑㄩㄝˋ","碼":"ㄇㄚˇ","示":"ㄕˋ","社":"ㄕㄜˋ","祈":"ㄑㄧˊ","神":"ㄕㄣˊ","禮":"ㄌㄧˇ","私":"ㄙ","科":"ㄎㄜ","移":"ㄧˊ","程":"ㄔㄥˊ","種":"ㄓㄨㄥˇ","稱":"ㄔㄥ","空":"ㄎㄨㄥˋ","穿":"ㄔㄨㄢ","窗":"ㄔㄨㄤ","立":"ㄌㄧˋ","站":"ㄓㄢˋ","端":"ㄉㄨㄢ","笑":"ㄒㄧㄠˋ","第":"ㄉㄧˋ","筆":"ㄅㄧˇ","等":"ㄉㄥˇ","答":"ㄉㄚˊ","策":"ㄘㄜˋ","箏":"ㄓㄥ","箱":"ㄒㄧㄤ","節":"ㄐㄧㄝˊ","範":"ㄈㄢˋ","簡":"ㄐㄧㄢˇ","簿":"ㄅㄨˋ","籃":"ㄌㄢˊ","米":"ㄇㄧˇ","精":"ㄐㄧㄥ","系":"ㄒㄧˋ","紅":"ㄏㄨㄥˊ","納":"ㄋㄚˋ","紙":"ㄓˇ","級":"ㄐㄧˊ","索":"ㄙㄨㄛˇ","細":"ㄒㄧˋ","絡":"ㄌㄨㄛˋ","給":"ㄍㄟˇ","綜":"ㄗㄨㄥ","網":"ㄨㄤˇ","線":"ㄒㄧㄢˋ","練":"ㄌㄧㄢˋ","總":"ㄗㄨㄥˇ","績":"ㄐㄧ","繩":"ㄕㄥˊ","缸":"ㄍㄤ","置":"ㄓˋ","義":"ㄧˋ","羽":"ㄩˇ","習":"ㄒㄧˊ","翻":"ㄈㄢ","老":"ㄌㄠˇ","考":"ㄎㄠˇ","聆":"ㄌㄧㄥˊ","聊":"ㄌㄧㄠˊ","聯":"ㄌㄧㄢˊ","職":"ㄓˊ","聽":"ㄊㄧㄥ","肉":"ㄖㄡˋ","背":"ㄅㄟˋ","能":"ㄋㄥˊ","脖":"ㄅㄛˊ","腦":"ㄋㄠˇ","腳":"ㄐㄧㄠˇ","膠":"ㄐㄧㄠ","臉":"ㄌㄧㄢˇ","自":"ㄗˋ","臺":"ㄊㄞˊ","舅":"ㄐㄧㄡˋ","與":"ㄩˇ","興":"ㄒㄧㄥˋ","色":"ㄙㄜˋ","芋":"ㄩˋ","芒":"ㄇㄤˊ","英":"ㄧㄥ","茄":"ㄑㄧㄝˊ","菜":"ㄘㄞˋ","萄":"ㄊㄠˊ","落":"ㄌㄨㄛˋ","著":"ㄓㄜ˙","葡":"ㄆㄨˊ","蔔":"ㄅㄛˊ","薯":"ㄕㄨˇ","藏":"ㄘㄤˊ","藝":"ㄧˋ","蘿":"ㄌㄨㄛˊ","虎":"ㄏㄨˇ","號":"ㄏㄠˋ","蝴":"ㄏㄨˊ","蝶":"ㄉㄧㄝˊ","行":"ㄒㄧㄥˊ","術":"ㄕㄨˋ","衣":"ㄧ","表":"ㄅㄧㄠˇ","袋":"ㄉㄞˋ","被":"ㄅㄟˋ","裙":"ㄑㄩㄣˊ","補":"ㄅㄨˇ","裝":"ㄓㄨㄤ","裡":"ㄌㄧˇ","製":"ㄓˋ","複":"ㄈㄨˋ","褲":"ㄎㄨˋ","襪":"ㄨㄚˋ","西":"ㄒㄧ","要":"ㄧㄠˋ","見":"ㄐㄧㄢˋ","規":"ㄍㄨㄟ","覺":"ㄐㄩㄝˊ","觀":"ㄍㄨㄢ","解":"ㄐㄧㄝˇ","訂":"ㄉㄧㄥˋ","訊":"ㄒㄩㄣˋ","記":"ㄐㄧˋ","訝":"ㄧㄚˋ","訪":"ㄈㄤˇ","設":"ㄕㄜˋ","詞":"ㄘˊ","試":"ㄕˋ","話":"ㄏㄨㄚˋ","語":"ㄩˇ","誤":"ㄨˋ","說":"ㄕㄨㄛ","誰":"ㄕㄟˊ","課":"ㄎㄜˋ","談":"ㄊㄢˊ","請":"ㄑㄧㄥˇ","論":"ㄌㄨㄣˋ","警":"ㄐㄧㄥˇ","護":"ㄏㄨˋ","讀":"ㄉㄨˊ","變":"ㄅㄧㄢˋ","讓":"ㄖㄤˋ","豆":"ㄉㄡˋ","象":"ㄒㄧㄤˋ","貌":"ㄇㄠˋ","貼":"ㄊㄧㄝ","資":"ㄗ","起":"ㄑㄧˇ","超":"ㄔㄠ","趣":"ㄑㄩˋ","足":"ㄗㄨˊ","跑":"ㄆㄠˇ","跟":"ㄍㄣ","跨":"ㄎㄨㄚˋ","路":"ㄌㄨˋ","跳":"ㄊㄧㄠˋ","踏":"ㄊㄚˋ","踢":"ㄊㄧ","身":"ㄕㄣ","車":"ㄔㄜ","較":"ㄐㄧㄠˋ","輪":"ㄌㄨㄣˊ","農":"ㄋㄨㄥˊ","迎":"ㄧㄥˊ","述":"ㄕㄨˋ","迷":"ㄇㄧˊ","逗":"ㄉㄡˋ","這":"ㄓㄜˋ","速":"ㄙㄨˋ","連":"ㄌㄧㄢˊ","週":"ㄓㄡ","進":"ㄐㄧㄣˋ","遊":"ㄧㄡˊ","運":"ㄩㄣˋ","遍":"ㄅㄧㄢˋ","過":"ㄍㄨㄛˋ","道":"ㄉㄠˋ","適":"ㄕˋ","遲":"ㄔˊ","選":"ㄒㄩㄢˇ","還":"ㄏㄞˊ","邊":"ㄅㄧㄢ","那":"ㄋㄚˋ","部":"ㄅㄨˋ","都":"ㄉㄡ","醫":"ㄧ","采":"ㄘㄞˇ","重":"ㄓㄨㄥˋ","鈴":"ㄌㄧㄥˊ","錄":"ㄌㄨˋ","錯":"ㄘㄨㄛˋ","長":"ㄓㄤˇ","門":"ㄇㄣˊ","閃":"ㄕㄢˇ","開":"ㄎㄞ","間":"ㄐㄧㄢ","閱":"ㄩㄝˋ","防":"ㄈㄤˊ","阿":"ㄚ","除":"ㄔㄨˊ","陽":"ㄧㄤˊ","隨":"ㄙㄨㄟˊ","雙":"ㄕㄨㄤ","雨":"ㄩˇ","雪":"ㄒㄩㄝˇ","雲":"ㄩㄣˊ","電":"ㄉㄧㄢˋ","需":"ㄒㄩ","靜":"ㄐㄧㄥˋ","面":"ㄇㄧㄢˋ","靴":"ㄒㄩㄝ","鞋":"ㄒㄧㄝˊ","鞦":"ㄑㄧㄡ","韆":"ㄑㄧㄢ","音":"ㄧㄣ","頁":"ㄧㄝˋ","項":"ㄒㄧㄤˋ","順":"ㄕㄨㄣˋ","預":"ㄩˋ","頸":"ㄐㄧㄥˇ","頻":"ㄆㄧㄣˊ","題":"ㄊㄧˊ","類":"ㄌㄟˋ","顯":"ㄒㄧㄢˇ","風":"ㄈㄥ","食":"ㄕˊ","飢":"ㄐㄧ","飾":"ㄕˋ","餐":"ㄘㄢ","餓":"ㄜˋ","首":"ㄕㄡˇ","馬":"ㄇㄚˇ","駝":"ㄊㄨㄛˊ","駱":"ㄌㄨㄛˋ","騎":"ㄑㄧˊ","驗":"ㄧㄢˋ","驚":"ㄐㄧㄥ","體":"ㄊㄧˇ","鬼":"ㄍㄨㄟˇ","魚":"ㄩˊ","鱷":"ㄜˋ","鳥":"ㄋㄧㄠˇ","鵝":"ㄜˊ","鵡":"ㄨˇ","鸚":"ㄧㄥ","鹿":"ㄌㄨˋ","麥":"ㄇㄞˋ","麵":"ㄇㄧㄢˋ","麼":"ㄇㄜ˙","黏":"ㄋㄧㄢˊ","黑":"ㄏㄟ","點":"ㄉㄧㄢˇ","鼠":"ㄕㄨˇ","鼻":"ㄅㄧˊ","齊":"ㄑㄧˊ","齒":"ㄔˇ"},"p":{"上床睡覺":"ㄕㄤˋ ㄔㄨㄤˊ ㄕㄨㄟˋ ㄐㄧㄠˋ","了不起的工作":"ㄌㄧㄠˇ ㄅㄨˋ ㄑㄧˇ ㄉㄜ˙ ㄍㄨㄥ ㄗㄨㄛˋ","儲存空間已滿":"ㄔㄨˇ ㄘㄨㄣˊ ㄎㄨㄥ ㄐㄧㄢ ㄧˇ ㄇㄢˇ","可以教我拼":"ㄎㄜˇ ㄧˇ ㄐㄧㄠ ㄨㄛˇ ㄆㄧㄣ","可以教我說這個字嗎":"ㄎㄜˇ ㄧˇ ㄐㄧㄠ ㄨㄛˇ ㄕㄨㄛ ㄓㄜˋ ㄍㄜˋ ㄗˋ ㄇㄚ˙","太空站的一天":"ㄊㄞˋ ㄎㄨㄥ ㄓㄢˋ ㄉㄜ˙ ㄧ ㄊㄧㄢ","寫出點心的名字和為什麼喜歡":"ㄒㄧㄝˇ ㄔㄨ ㄉㄧㄢˇ ㄒㄧㄣ ㄉㄜ˙ ㄇㄧㄥˊ ㄗˋ ㄏㄢˋ ㄨㄟˋ ㄕㄣˊ ㄇㄜ˙ ㄒㄧˇ ㄏㄨㄢ","已從雲端取得較新的進度":"ㄧˇ ㄘㄨㄥˊ ㄩㄣˊ ㄉㄨㄢ ㄑㄩˇ ㄉㄜˊ ㄐㄧㄠˋ ㄒㄧㄣ ㄉㄜ˙ ㄐㄧㄣˋ ㄉㄨˋ","已還原":"ㄧˇ ㄏㄨㄢˊ ㄩㄢˊ","從備份碼還原":"ㄘㄨㄥˊ ㄅㄟˋ ㄈㄣˋ ㄇㄚˇ ㄏㄨㄢˊ ㄩㄢˊ","把字母清掉重排看看":"ㄅㄚˇ ㄗˋ ㄇㄨˇ ㄑㄧㄥ ㄉㄧㄠˋ ㄔㄨㄥˊ ㄆㄞˊ ㄎㄢˋ ㄎㄢˋ","數數":"ㄕㄨˇ ㄕㄨˋ","有禮貌地要東西":"ㄧㄡˇ ㄌㄧˇ ㄇㄠˋ ㄉㄜ˙ ㄧㄠˋ ㄉㄨㄥ ㄒㄧ","有禮貌地請求":"ㄧㄡˇ ㄌㄧˇ ㄇㄠˋ ㄉㄜ˙ ㄑㄧㄥˇ ㄑㄧㄡˊ","洋芋片":"ㄧㄤˊ ㄩˋ ㄆㄧㄢˋ","穿著":"ㄔㄨㄢ ㄓㄨㄛˊ","著色":"ㄓㄨㄛˊ ㄙㄜˋ","還原":"ㄏㄨㄢˊ ㄩㄢˊ","長褲":"ㄔㄤˊ ㄎㄨˋ","長頸鹿":"ㄔㄤˊ ㄐㄧㄥˇ ㄌㄨˋ","長頸鹿脖子最長":"ㄔㄤˊ ㄐㄧㄥˇ ㄌㄨˋ ㄅㄛˊ ㄗ˙ ㄗㄨㄟˋ ㄔㄤˊ","長鼻子":"ㄔㄤˊ ㄅㄧˊ ㄗ˙","點卡片看中文":"ㄉㄧㄢˇ ㄎㄚˇ ㄆㄧㄢˋ ㄎㄢˋ ㄓㄨㄥ ㄨㄣˊ","點卡片翻面":"ㄉㄧㄢˇ ㄎㄚˇ ㄆㄧㄢˋ ㄈㄢ ㄇㄧㄢˋ"}};
+
+let zyOn = true;
+try{ zyOn = localStorage.getItem("cindy-zhuyin") !== "off"; }catch(e){}
+
+const ZY_SKIP = {SCRIPT:1, STYLE:1, INPUT:1, TEXTAREA:1, SELECT:1, OPTION:1, SVG:1};
+const HAN = /[\u4e00-\u9fff]/;
+const HAN_RUN = /([\u4e00-\u9fff]+)/;
+
+function zyRead(run){
+  if(ZY.p[run]) return ZY.p[run].split(" ");
+  const out = [];
+  let i = 0;
+  while(i < run.length){
+    let hit = null;
+    for(let L = Math.min(8, run.length - i); L >= 2; L--){
+      const seg = run.substr(i, L);
+      if(ZY.p[seg]){ hit = ZY.p[seg].split(" "); break; }
+    }
+    if(hit){ for(const h of hit) out.push(h); i += hit.length; }
+    else { out.push(ZY.c[run.charAt(i)] || ""); i++; }
+  }
+  return out;
+}
+/* 輕聲點放到最前面，直排時會落在符號上方（台灣標注方式） */
+function zyTidy(r){ return r && r.slice(-1) === "˙" ? "˙" + r.slice(0, -1) : r; }
+
+function zyApply(root){
+  if(!zyOn || !root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      if(!HAN.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+      let p = n.parentElement;
+      while(p){
+        if(ZY_SKIP[p.tagName] || p.classList.contains("zy") || p.hasAttribute("data-nozy")) return NodeFilter.FILTER_REJECT;
+        if(p === root) break;
+        p = p.parentElement;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const frag = document.createDocumentFragment();
+    n.nodeValue.split(HAN_RUN).forEach(part => {
+      if(!part) return;
+      if(!HAN.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
+      const reads = zyRead(part);
+      for(let i = 0; i < part.length; i++){
+        const box = document.createElement("span"); box.className = "zy";
+        const ch = document.createElement("span"); ch.className = "zy-c"; ch.textContent = part.charAt(i);
+        const rt = document.createElement("span"); rt.className = "zy-r"; rt.textContent = zyTidy(reads[i] || "");
+        box.appendChild(ch); box.appendChild(rt); frag.appendChild(box);
+      }
+    });
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+
+/* 畫面內容隨時在變（測驗回饋、閃卡翻面…），用 MutationObserver 自動補上注音 */
+let zyQueued = false;
+function zyWatch(el){
+  if(!el || !window.MutationObserver) return;
+  new MutationObserver(() => {
+    if(!zyOn || zyQueued) return;
+    zyQueued = true;
+    requestAnimationFrame(() => { zyQueued = false; zyApply(el); });
+  }).observe(el, {childList:true, subtree:true, characterData:true});
+}
+
+/* ============================================================
    路由
    ============================================================ */
 const app = $("#app");
@@ -814,10 +972,11 @@ function go(view, opts){
   render();
 }
 function render(){
-  document.querySelectorAll("#topnav button").forEach(b =>
+  document.querySelectorAll("#topnav button[data-go]").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.go === state.view)));
   ({home:renderHome, subject:renderSubject, unit:renderUnit, week:renderWeek,
     progress:renderProgress, parent:renderParent}[state.view] || renderHome)();
+  zyApply(app);
 }
 function crumb(links, current){
   return `<nav class="crumb">${links.map(l =>
@@ -1408,9 +1567,47 @@ function renderProgress(){
     <div class="sec"><h3>課本單元（本學期）</h3><div class="scroll-x"><table class="ptable">
       <thead><tr><th>單元</th><th>重點</th><th>閃卡</th><th>測驗</th><th>拼字</th><th style="text-align:right">星星</th></tr></thead>
       <tbody>${urows}</tbody></table></div></div>
+    <div class="sec"><h3>跨裝置同步</h3>
+      <div class="note" style="margin-bottom:10px">
+        <strong>目前狀態：</strong>${esc(syncLabel())}
+      </div>
+      ${SYNC_URL ? `<div class="btn-row" style="margin-bottom:14px"><button class="btn" id="snow">立即同步</button></div>` : ""}
+      <p class="muted" style="margin:0 0 10px">
+        沒有設定自動同步時，可以用備份碼手動搬到另一台裝置：在這台按「複製備份碼」，到另一台貼進下面的框按「還原」。</p>
+      <div class="form">
+        <div class="field"><label for="bk">備份碼</label>
+          <textarea id="bk" spellcheck="false" placeholder="按「複製備份碼」會出現在這裡；或把另一台複製來的備份碼貼進來"></textarea></div>
+        <div class="btn-row">
+          <button class="btn" id="bexp">複製備份碼</button>
+          <button class="btn" id="bimp">從備份碼還原</button>
+        </div>
+      </div>
+    </div>
     <div class="sec"><button class="btn" id="rst">清除所有進度</button></div>
     ${footer()}`;
   bindCrumb();
+  const ta = $("#bk");
+  $("#bexp").onclick = () => {
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(snapshot()))));
+    ta.value = code;
+    ta.focus(); ta.select();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(()=>toast("備份碼已複製"), ()=>toast("備份碼已產生，請手動複製"));
+    }else toast("備份碼已產生，請手動複製");
+  };
+  $("#bimp").onclick = () => {
+    const raw = ta.value.trim();
+    if(!raw) return toast("請先貼上備份碼");
+    let o = null;
+    try{ o = JSON.parse(decodeURIComponent(escape(atob(raw)))); }
+    catch(e){ try{ o = JSON.parse(raw); }catch(e2){ o = null; } }
+    if(!o || !o.progress) return toast("備份碼看起來不正確");
+    if(!confirm("要用這段備份碼取代這台裝置目前的進度嗎？")) return;
+    applySnapshot(o); state.updatedAt = Date.now(); save();
+    toast("已還原"); renderProgress();
+  };
+  const sn = $("#snow");
+  if(sn) sn.onclick = () => syncNow(true);
   $("#rst").onclick = () => {
     if(confirm("確定要把所有進度清空嗎？自訂單字和題目不會被刪除。")){
       state.progress = {}; save(); toast("進度已清空"); renderProgress();
@@ -1490,12 +1687,44 @@ function renderParent(){
     state.custom.questions = state.custom.questions.filter(q => q.id !== b.dataset.dq); save(); renderParent(); });
 }
 function subjName(id){ const s = SUBJECTS.find(x => x.id === id); return s ? s.name : id; }
+function syncLabel(){
+  if(state.db) return "已連上 Claude 雲端，換裝置也看得到。";
+  if(!SYNC_URL) return "只存在這台裝置。要跨裝置自動同步，請在 HTML 最上面的 SYNC_URL 填入同步網址。";
+  if(state.sync === "ok") return "自動同步中（你設定的同步網址）。";
+  if(state.sync === "error") return "同步網址連不上，資料暫時只存在這台裝置。";
+  return "正在連線…";
+}
 
 /* ============================================================ */
-document.querySelectorAll("#topnav button").forEach(b => b.onclick = () => go(b.dataset.go));
+const topbarEl = document.querySelector(".topbar");
+const topbarHTML = topbarEl.innerHTML;
+
+function bindTopbar(){
+  document.querySelectorAll("#topnav button[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+  const t = document.querySelector("#zytoggle");
+  t.setAttribute("aria-pressed", String(zyOn));
+  t.onclick = () => {
+    zyOn = !zyOn;
+    document.body.classList.toggle("zy-on", zyOn);
+    try{ localStorage.setItem("cindy-zhuyin", zyOn ? "on" : "off"); }catch(e){}
+    topbarEl.innerHTML = topbarHTML;   /* 先還原成沒有注音的版本 */
+    bindTopbar();
+    if(zyOn) zyApply(topbarEl);
+    render();
+    toast(zyOn ? "注音已開啟" : "注音已關閉");
+  };
+}
+
 loadLocal();
+bindTopbar();
+document.body.classList.toggle("zy-on", zyOn);
 render();
+zyApply(topbarEl);
+zyApply(document.querySelector("#status"));
+zyWatch(app);
+zyWatch(document.querySelector("#status"));
 initDb();
+if(SYNC_URL) syncNow(false);
 </script>
 
 </body>
