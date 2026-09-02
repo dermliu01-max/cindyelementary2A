@@ -1,0 +1,1502 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="margin:0">
+<title>Cindy 的小二複習站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
+
+<style>
+:root{
+  --paper:#EFF3F8; --surface:#FFFFFF; --surface-2:#E4EAF3; --surface-3:#F6F9FC;
+  --ink:#16233D; --ink-2:#4A5870; --ink-3:#7B889D;
+  --line:#D2DBE8; --line-2:#BDC9DA;
+  --accent:#2B54C4; --accent-soft:#DEE6FC; --on-accent:#FFFFFF;
+  --gold:#B57405; --gold-soft:#FAEED4;
+  --good:#1B7F5A; --good-soft:#D7EFE4;
+  --bad:#BF3B39; --bad-soft:#FADEDC;
+  --s-chinese:#C24A3E; --s-math:#2F5AA8; --s-english:#B67505;
+  --s-science:#2A8560; --s-social:#6B4A90; --s-other:#55637C;
+  --shadow-1:0 1px 2px rgba(22,35,61,.07);
+  --shadow-2:0 2px 4px rgba(22,35,61,.06), 0 10px 26px rgba(22,35,61,.09);
+  --r-s:8px; --r-m:14px; --r-l:22px;
+  --font-zh:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-display:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --font-en:"Andika","Noto Sans TC",Verdana,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101725; --surface:#1A2436; --surface-2:#232F46; --surface-3:#151E2E;
+    --ink:#E9EFF9; --ink-2:#A9B7CD; --ink-3:#7B8AA3;
+    --line:#2D3A54; --line-2:#3B4A68;
+    --accent:#8AA8FF; --accent-soft:#22304E; --on-accent:#0E1626;
+    --gold:#EDB443; --gold-soft:#382C12;
+    --good:#4FC796; --good-soft:#123226;
+    --bad:#F0837F; --bad-soft:#3B1E1E;
+    --s-chinese:#E88C7F; --s-math:#8AA8FF; --s-english:#EDB443;
+    --s-science:#5FC698; --s-social:#B695DC; --s-other:#94A3BC;
+    --shadow-1:0 1px 2px rgba(0,0,0,.3);
+    --shadow-2:0 2px 4px rgba(0,0,0,.25), 0 10px 26px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101725; --surface:#1A2436; --surface-2:#232F46; --surface-3:#151E2E;
+  --ink:#E9EFF9; --ink-2:#A9B7CD; --ink-3:#7B8AA3;
+  --line:#2D3A54; --line-2:#3B4A68;
+  --accent:#8AA8FF; --accent-soft:#22304E; --on-accent:#0E1626;
+  --gold:#EDB443; --gold-soft:#382C12;
+  --good:#4FC796; --good-soft:#123226;
+  --bad:#F0837F; --bad-soft:#3B1E1E;
+  --s-chinese:#E88C7F; --s-math:#8AA8FF; --s-english:#EDB443;
+  --s-science:#5FC698; --s-social:#B695DC; --s-other:#94A3BC;
+  --shadow-1:0 1px 2px rgba(0,0,0,.3);
+  --shadow-2:0 2px 4px rgba(0,0,0,.25), 0 10px 26px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-zh); font-size:16px; line-height:1.65;
+  -webkit-text-size-adjust:100%;
+}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:6px}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important; transition-duration:.01ms !important}}
+
+.en{font-family:var(--font-en)}
+.shell{max-width:900px; margin:0 auto; padding:0 16px 72px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--line)}
+.topbar-in{max-width:900px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:12px}
+.brand{display:flex; align-items:center; gap:10px; flex:1; min-width:0}
+.mark{
+  width:38px; height:38px; flex:none; border-radius:12px;
+  background:var(--accent); color:var(--on-accent);
+  font-family:var(--font-display); font-weight:900; font-size:20px;
+  display:grid; place-items:center;
+}
+.brand h1{margin:0; font-family:var(--font-display); font-size:17px; line-height:1.25}
+.brand p{margin:0; font-size:11px; color:var(--ink-3); letter-spacing:.06em}
+.topnav{display:flex; gap:4px; flex:none}
+.topnav button{background:none; border:0; padding:8px 10px; border-radius:10px; font-size:13px; color:var(--ink-2); min-height:40px}
+.topnav button[aria-current="true"]{background:var(--accent-soft); color:var(--accent); font-weight:700}
+
+/* ---------- generic ---------- */
+.crumb{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:16px 0 4px; font-size:13px; color:var(--ink-3)}
+.crumb button{background:none; border:0; padding:6px 0; color:var(--accent); font-size:13px}
+.page-head{padding:6px 0 18px; border-bottom:1px solid var(--line); margin-bottom:20px}
+.page-head h2{margin:0 0 6px; font-family:var(--font-display); font-size:26px; line-height:1.25; text-wrap:balance}
+.page-head p{margin:0; color:var(--ink-2); font-size:14px; max-width:62ch}
+.eyebrow{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:700; margin:0 0 10px}
+.sec{margin:26px 0 0}
+.sec > h3{margin:0 0 10px; font-size:13px; font-weight:700; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase}
+.muted{color:var(--ink-3); font-size:13px}
+.note{background:var(--surface-3); border:1px dashed var(--line-2); border-radius:var(--r-m); padding:14px 16px; color:var(--ink-2); font-size:14px}
+
+/* ---------- this week ---------- */
+.week-hero{
+  background:var(--surface); border:1px solid var(--line); border-left:6px solid var(--gold);
+  border-radius:var(--r-l); padding:20px 22px; box-shadow:var(--shadow-1); margin:16px 0 22px;
+}
+.week-hero .wk-top{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:2px}
+.week-hero .wk-n{font-family:var(--font-display); font-size:24px; line-height:1.2}
+.week-hero .wk-d{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.week-hero .wk-u{margin:6px 0 14px; font-size:14px; color:var(--ink-2)}
+.week-hero h2{margin:0 0 4px; font-family:var(--font-display); font-size:15px; letter-spacing:.02em}
+.sentence-box{
+  background:var(--accent-soft); border-radius:var(--r-m); padding:14px 16px; margin-top:14px;
+}
+.sentence-box .s-en{font-family:var(--font-en); font-weight:700; font-size:18px; line-height:1.4; color:var(--ink)}
+.sentence-box .s-zh{font-size:14px; color:var(--ink-2); margin-top:2px}
+.exam-flag{
+  display:inline-block; background:var(--bad-soft); color:var(--bad); font-weight:700;
+  font-size:12px; padding:3px 10px; border-radius:999px;
+}
+
+.hero{
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l);
+  padding:20px 22px; box-shadow:var(--shadow-1); margin:16px 0 24px;
+}
+.hero-text{flex:1 1 240px; min-width:0}
+.hero-text h2{margin:0 0 4px; font-family:var(--font-display); font-size:22px; text-wrap:balance}
+.hero-text p{margin:0; color:var(--ink-2); font-size:14px}
+.ring{flex:none; display:flex; align-items:center; gap:12px}
+.ring svg{display:block}
+.ring .rlabel{font-size:12px; color:var(--ink-3); line-height:1.4}
+.ring .rlabel b{display:block; font-size:20px; color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ---------- subject cards ---------- */
+.subjects{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.subj{
+  display:flex; align-items:center; gap:14px; text-align:left; width:100%;
+  background:var(--surface); border:1px solid var(--line); border-left:5px solid var(--sc);
+  border-radius:var(--r-m); padding:14px 16px; min-height:76px;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.subj:hover{transform:translateY(-2px); box-shadow:var(--shadow-2)}
+.subj-ico{
+  width:42px; height:42px; flex:none; border-radius:11px; display:grid; place-items:center;
+  background:color-mix(in srgb, var(--sc) 15%, transparent); color:var(--sc);
+  font-family:var(--font-display); font-weight:900; font-size:17px;
+}
+.subj-main{flex:1; min-width:0}
+.subj-main strong{display:flex; align-items:center; gap:8px; font-size:16px; font-weight:700}
+.subj-main .subj-desc{display:block; font-size:12.5px; color:var(--ink-3)}
+.subj-arrow{color:var(--ink-3); font-size:18px; flex:none}
+.chip-soon{font-size:11px; line-height:1.6; padding:1px 9px; border-radius:999px; flex:none; background:var(--surface-2); color:var(--ink-3); font-weight:500}
+
+/* ---------- rows ---------- */
+.rows{display:flex; flex-direction:column; gap:8px}
+.row{
+  display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m);
+  padding:11px 14px; min-height:68px;
+}
+.row:hover{border-color:var(--line-2)}
+.row.now{border-color:var(--gold); border-width:2px; background:var(--gold-soft)}
+.row.exam{background:var(--surface-3); border-style:dashed}
+.rnum{
+  width:40px; height:40px; flex:none; border-radius:11px; display:grid; place-items:center;
+  font-family:var(--font-display); font-weight:900; font-size:16px; line-height:1;
+  background:var(--accent-soft); color:var(--accent); font-variant-numeric:tabular-nums;
+}
+.row.done .rnum{background:var(--good-soft); color:var(--good)}
+.row.now .rnum{background:var(--gold); color:#fff}
+.row.exam .rnum{background:var(--bad-soft); color:var(--bad); font-size:13px}
+.rmain{flex:1; min-width:0; overflow:hidden}
+.rmain .rt{font-size:14.5px; font-weight:700; line-height:1.35}
+.rmain .rt .en{font-weight:700}
+.rmain .rs{font-size:12.5px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.rmain .rw{font-family:var(--font-en); font-size:12.5px; color:var(--ink-2); margin-top:2px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rtag{flex:none; font-size:11px; padding:2px 9px; border-radius:999px; background:var(--surface-2); color:var(--ink-3); font-weight:700}
+.rtag.ok{background:var(--good-soft); color:var(--good)}
+.bar{height:5px; border-radius:999px; background:var(--surface-2); overflow:hidden; margin-top:6px; max-width:190px}
+.bar i{display:block; height:100%; background:var(--gold); border-radius:999px}
+.stars{flex:none; font-size:12px; color:var(--gold); letter-spacing:1px}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex; gap:2px; background:var(--surface-2); padding:4px; border-radius:var(--r-m); margin-bottom:20px; overflow-x:auto}
+.tabs button{flex:1 0 auto; background:none; border:0; padding:9px 14px; border-radius:10px; font-size:14px; color:var(--ink-2); white-space:nowrap; min-height:42px}
+.tabs button[aria-selected="true"]{background:var(--surface); color:var(--ink); font-weight:700; box-shadow:var(--shadow-1)}
+
+/* ---------- reference ---------- */
+.kv{display:grid; gap:10px}
+.kv-row{display:flex; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:12px 14px}
+.kv-row .kv-k{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:700; flex:0 0 76px; padding-top:3px}
+.kv-row .kv-v{flex:1; min-width:0; font-size:14.5px}
+
+.wordlist{display:grid; gap:8px; grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.wordlist.compact{grid-template-columns:repeat(auto-fill,minmax(148px,1fr))}
+.wordlist.compact .w-zh{font-size:12.5px}
+.word{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-s); padding:9px 10px 9px 12px; min-height:48px}
+.word .w-en{font-family:var(--font-en); font-weight:700; font-size:15px; flex:1; min-width:0}
+.word .w-zh{font-size:13px; color:var(--ink-2); flex:none}
+.speak{flex:none; width:34px; height:34px; border-radius:9px; border:1px solid var(--line); background:var(--surface-3); display:grid; place-items:center; color:var(--ink-2); font-size:14px}
+.speak:hover{border-color:var(--accent); color:var(--accent)}
+.goal-list{margin:0; padding-left:1.1em; color:var(--ink-2); font-size:14.5px}
+.goal-list li{margin:4px 0}
+.tag{display:inline-block; font-size:12px; padding:3px 10px; border-radius:999px; background:var(--gold-soft); color:var(--gold); font-weight:700; margin:0 6px 6px 0}
+
+/* ---------- sentence list ---------- */
+.sent{display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:12px 14px}
+.sent.ok{border-color:var(--good); background:var(--good-soft)}
+.sent .sn{flex:none; width:28px; height:28px; border-radius:8px; background:var(--surface-2); color:var(--ink-3); display:grid; place-items:center; font-size:12px; font-weight:700; font-variant-numeric:tabular-nums}
+.sent.ok .sn{background:var(--good); color:#fff}
+.sent .sm{flex:1; min-width:0}
+.sent .sm .se{font-family:var(--font-en); font-weight:700; font-size:15.5px; line-height:1.4}
+.sent .sm .sz{font-size:13px; color:var(--ink-2)}
+.sent .sa{display:flex; gap:4px; flex:none}
+
+/* ---------- flashcard ---------- */
+.fc-wrap{display:flex; flex-direction:column; align-items:center; gap:16px}
+.fc{width:100%; max-width:440px; min-height:210px; border-radius:var(--r-l); background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow-2); display:grid; place-items:center; padding:24px; text-align:center; gap:10px}
+.fc .fc-main{font-family:var(--font-en); font-weight:700; font-size:32px; line-height:1.2; word-break:break-word}
+.fc .fc-main.zh{font-family:var(--font-zh); font-size:28px}
+.fc .fc-sub{font-size:17px; color:var(--ink-2); min-height:24px}
+.fc .fc-hint{font-size:12px; color:var(--ink-3); letter-spacing:.06em}
+.fc-bar{display:flex; align-items:center; gap:10px; width:100%; max-width:440px}
+.fc-bar .count{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums; flex:none}
+
+.btn{border:1px solid var(--line-2); background:var(--surface); color:var(--ink); border-radius:12px; padding:11px 18px; font-size:15px; min-height:48px; font-weight:500}
+.btn:hover{border-color:var(--accent); color:var(--accent)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent); font-weight:700}
+.btn.primary:hover{filter:brightness(1.08); color:var(--on-accent)}
+.btn.small{padding:7px 12px; font-size:13px; min-height:38px; border-radius:10px}
+.btn.wide{width:100%}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap}
+
+/* ---------- quiz ---------- */
+.quiz{max-width:540px; margin:0 auto}
+.qprog{display:flex; align-items:center; gap:10px; margin-bottom:16px}
+.qprog .bar{max-width:none; flex:1; margin:0; height:6px}
+.qprog .bar i{background:var(--accent)}
+.qprog span{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums; flex:none}
+.qcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); padding:22px; box-shadow:var(--shadow-1)}
+.qkind{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:700}
+.qtext{margin:8px 0 18px; font-size:21px; line-height:1.45; text-wrap:balance}
+.opts{display:grid; gap:9px}
+.opt{text-align:left; width:100%; background:var(--surface-3); border:1.5px solid var(--line); border-radius:12px; padding:13px 16px; font-size:16px; min-height:52px}
+.opt.en{font-family:var(--font-en)}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--good-soft); border-color:var(--good); color:var(--good); font-weight:700}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.feedback{margin-top:14px; font-size:14px; padding:11px 14px; border-radius:12px; display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--good-soft); color:var(--good)}
+.feedback.no{background:var(--bad-soft); color:var(--bad)}
+.result{text-align:center; padding:26px 20px}
+.result .big{font-family:var(--font-display); font-size:52px; line-height:1; font-variant-numeric:tabular-nums}
+.result .msg{margin:10px 0 20px; color:var(--ink-2)}
+
+/* ---------- spelling ---------- */
+.sp-target{text-align:center; margin-bottom:12px}
+.sp-target .zh{font-size:24px; font-weight:700}
+.sp-slots{display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:18px 0; min-height:52px}
+.slot{width:36px; height:48px; border-radius:9px; border:2px dashed var(--line-2); display:grid; place-items:center; font-family:var(--font-en); font-weight:700; font-size:22px; background:var(--surface-3)}
+.slot.gap{border:0; background:none; width:14px}
+.slot.filled{border-style:solid; border-color:var(--accent); background:var(--accent-soft); color:var(--accent)}
+.sp-pool{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+.tile{width:42px; height:48px; border-radius:10px; border:1.5px solid var(--line-2); background:var(--surface); font-family:var(--font-en); font-weight:700; font-size:22px}
+.tile:disabled{opacity:.28}
+
+/* ---------- tables & forms ---------- */
+.ptable{width:100%; border-collapse:collapse; font-size:14px}
+.ptable th,.ptable td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left}
+.ptable th{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.ptable td.num{text-align:right; font-variant-numeric:tabular-nums}
+.scroll-x{overflow-x:auto}
+.pill{display:inline-block; font-size:12px; padding:2px 9px; border-radius:999px; font-weight:700}
+.pill.ok{background:var(--good-soft); color:var(--good)}
+.pill.mid{background:var(--gold-soft); color:var(--gold)}
+.pill.no{background:var(--surface-2); color:var(--ink-3)}
+
+.form{display:grid; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:16px}
+.field{display:grid; gap:5px}
+.field label{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.field input,.field select,.field textarea{font:inherit; font-size:15px; color:var(--ink); background:var(--surface-3); border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; min-height:46px; width:100%}
+.field textarea{min-height:76px; resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent); outline:none}
+.two{display:grid; gap:12px; grid-template-columns:1fr 1fr}
+.item{display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:12px 14px}
+.item .imain{flex:1; min-width:0}
+.item .imain .is{font-size:12.5px; color:var(--ink-3); margin-top:2px}
+.del{background:none; border:0; color:var(--ink-3); font-size:13px; padding:6px 8px; border-radius:8px}
+.del:hover{color:var(--bad); background:var(--bad-soft)}
+
+.status{position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:40; background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:999px; font-size:14px; box-shadow:var(--shadow-2); opacity:0; pointer-events:none; transition:opacity .18s ease}
+.status.show{opacity:1}
+.footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-3)}
+
+@media (max-width:520px){
+  .brand h1{font-size:15px} .brand p{display:none}
+  .topnav button{padding:8px; font-size:12.5px}
+  .page-head h2{font-size:22px}
+  .two{grid-template-columns:1fr}
+  .kv-row{flex-direction:column; gap:4px}
+  .kv-row .kv-k{flex:none; padding-top:0}
+}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="mark">C</div>
+      <div>
+        <h1>Cindy 的小二複習站</h1>
+        <p>再興小學 · 115 學年度第一學期</p>
+      </div>
+    </div>
+    <nav class="topnav" id="topnav">
+      <button data-go="home">首頁</button>
+      <button data-go="progress">進度</button>
+      <button data-go="parent">家長區</button>
+    </nav>
+  </div>
+</header>
+
+<main class="shell" id="app"></main>
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   學校資料 —— 再興小學 115 學年度第一學期 二年級英語
+   來源：二年級單字表（Next Move 2）、每週一句
+   ============================================================ */
+
+const TERM = {school:"臺北市私立再興小學", grade:"二年級", term:"115 學年度 第一學期", book:"Next Move 2"};
+
+const WEEKS = [
+  {n:1,  s:"2026-08-31", e:"2026-09-05", unit:"Unit 0", note:"", words:[
+    ["one","一"],["two","二"],["three","三"],["four","四"],
+    ["five","五"],["six","六"],["seven","七"],["eight","八"]]},
+  {n:2,  s:"2026-09-06", e:"2026-09-12", unit:"Unit 1", note:"", words:[
+    ["nine","九"],["ten","十"],["eleven","十一"],["twelve","十二"],
+    ["thirteen","十三"],["fourteen","十四"],["fifteen","十五"],["sixteen","十六"]]},
+  {n:3,  s:"2026-09-13", e:"2026-09-19", unit:"Unit 1", note:"", words:[
+    ["seventeen","十七"],["eighteen","十八"],["nineteen","十九"],["twenty","二十"],
+    ["number","數字"],["aunt","阿姨／姑姑"],["uncle","叔叔／舅舅"],["cousin","表（堂）兄弟姊妹"]]},
+  {n:4,  s:"2026-09-20", e:"2026-09-26", unit:"Unit 1", note:"", words:[
+    ["reading","閱讀"],["counting","數數"],["coloring","著色"],["cutting","剪"],
+    ["writing","寫字"],["drawing","畫圖"],["gluing","黏貼"],["talking","說話"]]},
+  {n:5,  s:"2026-09-27", e:"2026-10-03", unit:"Unit 1", note:"Quiz 1", words:[
+    ["erasing","擦掉"],["listening","聆聽"],["using","使用"],["glue","膠水"],
+    ["marker","麥克筆"],["notebook","筆記本"],["scissors","剪刀"],["paintbrush","水彩筆"]]},
+  {n:6,  s:"2026-10-04", e:"2026-10-10", unit:"Unit 2", note:"", words:[
+    ["hot","熱的"],["sunny","晴朗的"],["cloudy","多雲的"],["rainy","下雨的"],
+    ["windy","有風的"],["cold","冷的"],["snowy","下雪的"],["raincoat","雨衣"]]},
+  {n:7,  s:"2026-10-11", e:"2026-10-17", unit:"Unit 2", note:"", words:[
+    ["boots","靴子"],["sweater","毛衣"],["gloves","手套"],["hat","帽子"],
+    ["jacket","夾克"],["pants","長褲"],["wearing","穿著"],["bathing suit","泳衣"]]},
+  {n:8,  s:"2026-10-18", e:"2026-10-24", unit:"Unit 2", note:"", words:[
+    ["shorts","短褲"],["jeans","牛仔褲"],["socks","襪子"],["shoes","鞋子"],
+    ["sneakers","運動鞋"],["skirt","裙子"],["coat","外套"],["umbrella","雨傘"]]},
+  {n:9,  s:"2026-10-25", e:"2026-10-31", unit:"Unit 2", note:"Quiz 2", words:[
+    ["Monday","星期一"],["Tuesday","星期二"],["Wednesday","星期三"],["Thursday","星期四"],
+    ["Friday","星期五"],["Saturday","星期六"],["Sunday","星期日"],["today","今天"]]},
+  {n:10, s:"2026-11-01", e:"2026-11-07", unit:"", note:"期中考 Unit 1–2", exam:true, words:[]},
+  {n:11, s:"2026-11-08", e:"2026-11-14", unit:"Unit 3", note:"", words:[
+    ["jump rope","跳繩"],["play game","玩遊戲"],["basketball","籃球"],
+    ["baseball","棒球"],["soccer","足球"],["hide seek","捉迷藏"]]},
+  {n:12, s:"2026-11-15", e:"2026-11-21", unit:"Unit 3", note:"", words:[
+    ["ride bike","騎腳踏車"],["fly kite","放風箏"],["rollerblade","溜直排輪"],
+    ["skate","溜冰"],["skateboard","滑板"],["ball","球"]]},
+  {n:13, s:"2026-11-22", e:"2026-11-28", unit:"Unit 3", note:"", words:[
+    ["throw","丟"],["catch","接住"],["bounce","拍（球）"],["play tag","玩鬼抓人"],
+    ["fun","好玩的"],["boring","無聊的"],["run","跑"],["crawl","爬行"]]},
+  {n:14, s:"2026-11-29", e:"2026-12-05", unit:"Unit 3", note:"Quiz 3", words:[
+    ["climb","攀爬"],["slide","溜滑梯"],["swing","盪鞦韆"],["playground","遊樂場"],
+    ["sport","運動"],["rules","規則"],["fair","公平的"],["take turns","輪流"]]},
+  {n:15, s:"2026-12-06", e:"2026-12-12", unit:"Unit 4", note:"", words:[
+    ["tub","浴缸"],["shower","淋浴間"],["rug","地毯"],["shelves","層架"],
+    ["stairs","樓梯"],["stove","爐子"],["microwave","微波爐"],["bookcase","書櫃"]]},
+  {n:16, s:"2026-12-13", e:"2026-12-19", unit:"Unit 4", note:"", words:[
+    ["armchair","扶手椅"],["fireplace","壁爐"],["above","在…上方"],["behind","在…後面"],
+    ["under","在…下面"],["between","在…之間"],["next to","在…旁邊"],["in front of","在…前面"]]},
+  {n:17, s:"2026-12-20", e:"2026-12-26", unit:"Unit 4", note:"", words:[
+    ["window","窗戶"],["phone","電話"],["door","門"],["sink","水槽"],
+    ["refrigerator","冰箱"],["inside","裡面"],["outside","外面"],["welcome","歡迎"]]},
+  {n:18, s:"2026-12-27", e:"2027-01-02", unit:"Unit 4", note:"Quiz 4", words:[
+    ["different","不同的"],["people","人們"],["visit","拜訪"],["shape","形狀"],
+    ["favorite","最喜歡的"],["help","幫忙"],["chores","家事"],["furniture","家具"]]},
+  {n:19, s:"2027-01-03", e:"2027-01-09", unit:"Review Unit 3–4", note:"", words:[
+    ["special","特別的"],["really","真的"],["artist","藝術家"],["children","孩子們"],
+    ["weather","天氣"],["dress","洋裝／穿衣"],["neat","整齊的"],["put away","收好"]]},
+  {n:20, s:"2027-01-10", e:"2027-01-16", unit:"", note:"期末考 Unit 3–4", exam:true, words:[]},
+  {n:21, s:"2027-01-17", e:"2027-01-20", unit:"Review", note:"總複習", words:[]}
+];
+
+const SENTENCES = [
+  [1,"I love ____ class!","我愛 ____ 課！"],
+  [2,"Will we play a game today?","我們今天會玩遊戲嗎？"],
+  [3,"Can you please be quiet?","可以請你安靜嗎？"],
+  [4,"Shhh! I can't hear the teacher.","噓！我聽不見老師說話。"],
+  [5,"What do I need for class?","上課要準備什麼？"],
+  [6,"Sorry, I don't have my ____.","對不起，我沒有帶 ____。"],
+  [7,"I lost my ____. Can you share?","我的 ____ 不見了。可以跟同學一起嗎？"],
+  [8,"I didn't understand today's lesson.","我不懂今天的課程。"],
+  [9,"Can you please speak slower?","可以請你說慢一些嗎？"],
+  [10,"I have a question.","我有一個問題。"],
+  [11,"Can you help me say this word?","可以教我說這個字嗎？"],
+  [12,"Can you repeat that again?","可以再說一遍嗎？"],
+  [13,"Can you help me spell ____?","可以教我拼 ____ 這個字嗎？"],
+  [14,"I don't know where ____ is.","我不知道 ____ 在哪裡。"],
+  [15,"Which page are we working on?","我們現在上哪一頁？"],
+  [16,"Can I go to the board?","我可以去黑板嗎？"],
+  [17,"Is this what you wanted?","這是你要的嗎？"],
+  [18,"Can I fix my answer?","我可以修正答案嗎？"],
+  [19,"English first! Speak English, please.","老師說要使用英文。"],
+  [20,"I forgot what I was going to say.","我忘了我要說什麼。"]
+];
+
+/* ============================================================
+   課本單元（Next Move 2 · Scope and Sequence）
+   Unit 0–4 為本學期範圍，Unit 5–9 為下學期
+   ============================================================ */
+
+const SUBJECTS = [
+  {id:"chinese", name:"國語",    ico:"國", css:"--s-chinese", desc:"生字、詞語、課文重點", ready:false},
+  {id:"math",    name:"數學",    ico:"數", css:"--s-math",    desc:"加減、乘法、單位、應用題", ready:false},
+  {id:"english", name:"English", ico:"E",  css:"--s-english", desc:"Next Move 2 · 21 週進度", ready:true},
+  {id:"science", name:"自然",    ico:"自", css:"--s-science", desc:"觀察、植物、動物、天氣", ready:false},
+  {id:"social",  name:"社會",    ico:"社", css:"--s-social",  desc:"我和家人、學校、社區", ready:false},
+  {id:"other",   name:"其他",    ico:"他", css:"--s-other",   desc:"生活、健體、綜合", ready:false}
+];
+
+const UNITS = [
+  {
+    n:0, en:"My Family", zh:"我的家人", page:"p.4", term:1, weeks:[1],
+    area:"暖身單元 · 數字與家人",
+    goals:["說出 1 到 20 的數字","說出家人的稱呼","說出自己幾歲"],
+    v1:{label:"數字 1–10", strategy:"", words:[
+      ["one","一"],["two","二"],["three","三"],["four","四"],["five","五"],
+      ["six","六"],["seven","七"],["eight","八"],["nine","九"],["ten","十"]]},
+    v2:{label:"家人", strategy:"", words:[
+      ["mother","媽媽"],["father","爸爸"],["sister","姊妹"],["brother","兄弟"],
+      ["grandmother","奶奶／外婆"],["grandfather","爺爺／外公"],["baby","寶寶"],["family","家庭"]]},
+    g1:"Who's this? — This is my sister.（這是誰？這是我姊姊。）",
+    g2:"How old are you? — I'm seven.（你幾歲？我七歲。）",
+    reading:"", readingZh:"", strategyR:"", writing:"", writingFocus:"",
+    value:"", valueZh:"", project:"",
+    quiz:[
+      {q:"___ this? — This is my brother.", o:["Who's","What's","Where's"], a:0, why:"問「這是誰」用 Who's。"},
+      {q:"I'm seven ___ old.", o:["years","year","yearss"], a:0, why:"幾歲要用 years old。"},
+      {q:"3 + 4 = ___", o:["seven","eight","six"], a:0, why:"3 加 4 等於 seven。"},
+      {q:"This ___ my family.", o:["is","are","am"], a:0, why:"單數主詞 This 用 is。"}
+    ]
+  },
+  {
+    n:1, en:"Fun in Class", zh:"課堂樂趣", page:"p.10", term:1, weeks:[2,3,4,5],
+    area:"Social and Instructional Language · Language Arts",
+    goals:["說出別人正在做什麼","說出我正在用的教室用品","說出東西在哪裡"],
+    v1:{label:"正在做的事", strategy:"字根加字尾 -ing", words:[
+      ["coloring","著色"],["counting","數數"],["cutting","剪"],["drawing","畫圖"],
+      ["erasing","擦掉"],["gluing","黏貼"],["listening","聆聽"],["reading","閱讀"],
+      ["talking","說話"],["writing","寫字"]]},
+    v2:{label:"教室用品", strategy:"比較 /s/ 和 /z/ 的發音", words:[
+      ["glue","膠水"],["marker","麥克筆"],["notebook","筆記本"],
+      ["paintbrush","水彩筆"],["scissors","剪刀"]]},
+    g1:"現在進行式（第一人稱複數）：We are reading.（我們正在閱讀。）",
+    g2:"Are there…? 及簡答：Are there ten markers? — Yes, there are. / No, there aren't.",
+    reading:"Paper Art", readingZh:"紙的藝術", strategyR:"比較與對照（Compare and Contrast）",
+    writing:"畫下並寫出你和你的朋友", writingFocus:"寫短句，寫出名字和動作",
+    value:"Be neat.", valueZh:"保持整潔", project:"做一個裝文具的收納盒",
+    quiz:[
+      {q:"We ___ reading a book.", o:["are","is","am"], a:0, why:"We 後面用 are。"},
+      {q:"___ there ten markers?", o:["Are","Is","Do"], a:0, why:"複數 markers 用 Are there。"},
+      {q:"Are there five books? — No, there ___.", o:["aren't","isn't","not"], a:0, why:"複數否定簡答用 there aren't。"},
+      {q:"She is ___ a picture.（她正在畫圖）", o:["drawing","draw","draws"], a:0, why:"進行式用 be + V-ing。"},
+      {q:"我要剪紙，需要 ___", o:["scissors","glue","notebook"], a:0, why:"剪刀＝scissors。"}
+    ]
+  },
+  {
+    n:2, en:"Boots and Bathing Suits", zh:"靴子與泳衣", page:"p.26", term:1, weeks:[6,7,8,9],
+    area:"Language Arts · Science",
+    goals:["談論天氣","談論我的衣服","說出星期幾"],
+    v1:{label:"天氣", strategy:"字母順序（Alphabetical order）", words:[
+      ["hot","熱的"],["cold","冷的"],["sunny","晴朗的"],["cloudy","多雲的"],
+      ["rainy","下雨的"],["snowy","下雪的"],["windy","有風的"],["weather","天氣"]]},
+    v2:{label:"衣物", strategy:"", words:[
+      ["raincoat","雨衣"],["boots","靴子"],["sweater","毛衣"],["gloves","手套"],
+      ["hat","帽子"],["jacket","夾克"],["pants","長褲"],["shorts","短褲"],
+      ["jeans","牛仔褲"],["socks","襪子"],["shoes","鞋子"],["sneakers","運動鞋"],
+      ["skirt","裙子"],["coat","外套"],["umbrella","雨傘"],["bathing suit","泳衣"]]},
+    g1:"What's + 名詞 + like? — It's…：What's the weather like? — It's sunny.",
+    g2:"祈使句（Imperatives）：Put on your boots!（穿上你的靴子！）",
+    reading:"Snow Animals", readingZh:"雪地動物", strategyR:"找出主旨與細節（Main Idea and Details）",
+    writing:"寫一張你自己的照片", writingFocus:"描述天氣和身上的衣服",
+    value:"Dress for the weather.", valueZh:"看天氣穿衣服", project:"做一個天氣吊飾",
+    quiz:[
+      {q:"___ the weather like today?", o:["What's","Who's","Where's"], a:0, why:"問天氣用 What's the weather like?"},
+      {q:"It's ___. I need my umbrella.", o:["rainy","sunny","windy"], a:0, why:"需要雨傘表示在下雨。"},
+      {q:"___ on your coat! It's cold.", o:["Put","Puts","Putting"], a:0, why:"祈使句用動詞原形。"},
+      {q:"星期三的英文是 ___", o:["Wednesday","Thursday","Tuesday"], a:0, why:"星期三＝Wednesday。"},
+      {q:"天氣很熱，我要穿 ___", o:["shorts","sweater","boots"], a:0, why:"熱的時候穿短褲。"}
+    ]
+  },
+  {
+    n:3, en:"Fun in the Sun", zh:"陽光下的樂趣", page:"p.42", term:1, weeks:[11,12,13,14],
+    area:"Language Arts · Health and Physical Education",
+    goals:["說出我喜歡在戶外做的事","說出球類動作","說出遊樂場的規則"],
+    v1:{label:"戶外活動", strategy:"一字多義（Multiple-meaning words）", words:[
+      ["jump rope","跳繩"],["play game","玩遊戲"],["basketball","籃球"],["baseball","棒球"],
+      ["soccer","足球"],["hide seek","捉迷藏"],["ride bike","騎腳踏車"],["fly kite","放風箏"],
+      ["rollerblade","溜直排輪"],["skate","溜冰"],["skateboard","滑板"]]},
+    v2:{label:"動作與遊樂場", strategy:"比較 /eɪ/ 和 /aɪ/ 的發音", words:[
+      ["throw","丟"],["catch","接住"],["bounce","拍（球）"],["play tag","玩鬼抓人"],
+      ["run","跑"],["crawl","爬行"],["climb","攀爬"],["slide","溜滑梯"],
+      ["swing","盪鞦韆"],["playground","遊樂場"],["fun","好玩的"],["boring","無聊的"]]},
+    g1:"like + to + 原形動詞：I like to ride a bike.（我喜歡騎腳踏車。）",
+    g2:"Let's…：Let's play soccer!（我們來踢足球吧！）",
+    reading:"Amazing Playgrounds", readingZh:"驚奇遊樂場", strategyR:"提出問題（Ask Questions）",
+    writing:"寫下你做的活動", writingFocus:"寫出你喜歡做的事",
+    value:"Be a good sport. / Take turns. Be fair.", valueZh:"有運動家精神、輪流、公平", project:"做一幅壁畫",
+    quiz:[
+      {q:"I like ___ a kite.", o:["to fly","fly","flying to"], a:0, why:"like 後面接 to + 原形動詞。"},
+      {q:"___ play soccer!", o:["Let's","Let","Lets"], a:0, why:"「我們來…吧」用 Let's。"},
+      {q:"We play ___ with a bat and a ball.", o:["baseball","tag","hide seek"], a:0, why:"用球棒和球的是棒球。"},
+      {q:"在遊樂場要 ___（輪流）", o:["take turns","run","crawl"], a:0, why:"輪流＝take turns。"},
+      {q:"This game is not fun. It's ___.", o:["boring","fair","special"], a:0, why:"不好玩＝boring。"}
+    ]
+  },
+  {
+    n:4, en:"Inside Our House", zh:"我們的家裡", page:"p.62", term:1, weeks:[15,16,17,18,19],
+    area:"Social Studies",
+    goals:["說出家具和家用物品","說出東西在家裡的位置","說出在家幫忙做的事"],
+    v1:{label:"家具與設備", strategy:"複合字（Compound words）", words:[
+      ["tub","浴缸"],["shower","淋浴間"],["rug","地毯"],["shelves","層架"],
+      ["stairs","樓梯"],["stove","爐子"],["microwave","微波爐"],["bookcase","書櫃"],
+      ["armchair","扶手椅"],["fireplace","壁爐"],["window","窗戶"],["phone","電話"],
+      ["door","門"],["sink","水槽"],["refrigerator","冰箱"],["furniture","家具"]]},
+    v2:{label:"位置介系詞", strategy:"單一音 /oʊ/", words:[
+      ["above","在…上方"],["behind","在…後面"],["under","在…下面"],["between","在…之間"],
+      ["next to","在…旁邊"],["in front of","在…前面"],["inside","裡面"],["outside","外面"]]},
+    g1:"地方介系詞：The cat is under the armchair. / The lamp is next to the sofa.",
+    g2:"主詞代名詞 it / they：The rug is red. It is soft. / The books are old. They are heavy.",
+    reading:"Fun Houses", readingZh:"有趣的房子", strategyR:"用圖像幫助理解（Use Visuals）",
+    writing:"寫你家的一個房間", writingFocus:"寫出房間裡有什麼、在哪裡",
+    value:"Help at home. Do chores.", valueZh:"在家幫忙做家事", project:"用紙箱做一間房子",
+    quiz:[
+      {q:"The cat is ___ the armchair.（在椅子下面）", o:["under","above","between"], a:0, why:"下面＝under。"},
+      {q:"The books are on the ___.", o:["shelves","stove","tub"], a:0, why:"書放在層架上。"},
+      {q:"The shoes are dirty. ___ are old, too.", o:["They","It","He"], a:0, why:"複數 shoes 用 They。"},
+      {q:"我把牛奶放進 ___", o:["refrigerator","microwave","fireplace"], a:0, why:"冰箱＝refrigerator。"},
+      {q:"I help my mom. I do my ___.", o:["chores","rules","shapes"], a:0, why:"家事＝chores。"}
+    ]
+  },
+  {
+    n:5, en:"Day by Day", zh:"每一天", page:"p.78", term:2, weeks:[],
+    area:"Social and Instructional Language · Language Arts",
+    goals:["說出我每天做的事","說出我什麼時候做這些事","說出一天的時段"],
+    v1:{label:"每天的活動", strategy:"不規則複數（tooth → teeth）", words:[
+      ["brush my teeth","刷牙"],["eat breakfast","吃早餐"],["eat lunch","吃午餐"],["eat dinner","吃晚餐"],
+      ["get dressed","穿衣服"],["get up","起床"],["go to bed","上床睡覺"],["go to school","上學"],
+      ["play video games","玩電動"],["play with friends","和朋友玩"],["wash my face","洗臉"]]},
+    v2:{label:"一天的時段", strategy:"", words:[
+      ["in the morning","在早上"],["in the afternoon","在下午"],["in the evening","在傍晚"],
+      ["at night","在晚上"],["late","遲到／晚"]]},
+    g1:"說時間（Telling time）：It's seven o'clock.",
+    g2:"頻率副詞：always / usually / sometimes / never",
+    reading:"A Day in the Space Station", readingZh:"太空站的一天", strategyR:"找出事件順序",
+    writing:"寫你最喜歡的一天", writingFocus:"照順序寫出那天做的事",
+    value:"Be on time.", valueZh:"守時", project:"做一本手風琴書",
+    quiz:[
+      {q:"___ seven o'clock. Time to get up!", o:["It's","Its","Is"], a:0, why:"說時間用 It's。"},
+      {q:"I eat breakfast ___ the morning.", o:["in","at","on"], a:0, why:"morning 用 in the morning。"},
+      {q:"I go to bed ___ night.", o:["at","in","on"], a:0, why:"night 用 at night。"},
+      {q:"one tooth, two ___", o:["teeth","tooths","toothes"], a:0, why:"tooth 的複數是 teeth。"}
+    ]
+  },
+  {
+    n:6, en:"How Are You?", zh:"你好嗎？", page:"p.94", term:2, weeks:[],
+    area:"Language Arts",
+    goals:["說出別人看起來如何","說出別人的感覺","說出別人正在做什麼"],
+    v1:{label:"感覺", strategy:"反義詞與同義詞", words:[
+      ["angry","生氣的"],["bored","無聊的"],["excited","興奮的"],["hungry","飢餓的"],
+      ["scared","害怕的"],["silly","傻氣的"],["surprised","驚訝的"],["thirsty","口渴的"],
+      ["tired","疲倦的"],["worried","擔心的"]]},
+    v2:{label:"表情動作", strategy:"", words:[
+      ["crying","哭"],["frowning","皺眉"],["laughing","大笑"],["smiling","微笑"],["yawning","打呵欠"]]},
+    g1:"He / she looks…：She looks tired.",
+    g2:"How are you? — I'm + 形容詞；規則與不規則複數",
+    reading:"Fabulous Faces", readingZh:"精采的臉", strategyR:"提出問題",
+    writing:"寫一張特別活動的照片", writingFocus:"描述照片裡的人和感覺",
+    value:"Help make other people happy.", valueZh:"讓別人開心", project:"做一個紙袋玩偶",
+    quiz:[
+      {q:"How are you? — ___ tired.", o:["I'm","I","My"], a:0, why:"回答用 I'm + 形容詞。"},
+      {q:"She ___ happy today.", o:["looks","look","looking"], a:0, why:"第三人稱單數動詞加 s。"},
+      {q:"I want some water. I'm ___.", o:["thirsty","hungry","bored"], a:0, why:"想喝水是口渴。"},
+      {q:"one child, two ___", o:["children","childs","childes"], a:0, why:"child 的複數是 children。"}
+    ]
+  },
+  {
+    n:7, en:"Awesome Animals", zh:"超棒的動物", page:"p.114", term:2, weeks:[],
+    area:"Science · Social Studies",
+    goals:["說出動物的名稱","描述動物","說出動物會做和不會做的事"],
+    v1:{label:"動物", strategy:"上下文線索", words:[
+      ["camel","駱駝"],["crocodile","鱷魚"],["elephant","大象"],["giraffe","長頸鹿"],
+      ["hippo","河馬"],["kangaroo","袋鼠"],["lion","獅子"],["monkey","猴子"],
+      ["parrot","鸚鵡"],["penguin","企鵝"],["tiger","老虎"],["zebra","斑馬"]]},
+    v2:{label:"動物的特徵", strategy:"", words:[
+      ["big teeth","大牙齒"],["colorful feathers","彩色羽毛"],["long trunk","長鼻子"],
+      ["sharp claws","尖爪子"],["short tail","短尾巴"]]},
+    g1:"can / can't 表示能力：A penguin can swim.",
+    g2:"Does it have…? — Yes, it does. / No, it doesn't.",
+    reading:"Two Big Birds", readingZh:"兩種大鳥", strategyR:"比較與對照",
+    writing:"寫你最喜歡的動物", writingFocus:"寫出牠長什麼樣、會做什麼",
+    value:"Respect animals.", valueZh:"尊重動物", project:"做全班的動物卡",
+    quiz:[
+      {q:"A penguin ___ swim.", o:["can","cans","can to"], a:0, why:"can 後面直接接原形動詞。"},
+      {q:"A hippo ___ fly.", o:["can't","doesn't can","not can"], a:0, why:"否定用 can't。"},
+      {q:"A ___ has a very long neck.", o:["giraffe","camel","zebra"], a:0, why:"長頸鹿脖子最長。"},
+      {q:"A parrot has colorful ___.", o:["feathers","claws","trunk"], a:0, why:"鸚鵡有彩色羽毛。"}
+    ]
+  },
+  {
+    n:8, en:"The World of Work", zh:"工作的世界", page:"p.130", term:2, weeks:[],
+    area:"Language Arts · Social Studies",
+    goals:["談論各種工作","說出人們在哪裡工作","說出我長大想做什麼"],
+    v1:{label:"職業", strategy:"字尾 -er / -or", words:[
+      ["bus driver","公車司機"],["chef","廚師"],["dentist","牙醫"],["doctor","醫生"],
+      ["farmer","農夫"],["firefighter","消防員"],["nurse","護理師"],["office worker","上班族"],
+      ["police officer","警察"],["scientist","科學家"],["singer","歌手"],["vet","獸醫"]]},
+    v2:{label:"更多職業", strategy:"", words:[
+      ["artist","藝術家"],["inventor","發明家"],["movie star","電影明星"],
+      ["rock star","搖滾巨星"],["soccer player","足球員"]]},
+    g1:"Wh- 問句：Where does she work?",
+    g2:"want + to + 原形動詞：I want to be a vet.",
+    reading:"Wonderful Work!", readingZh:"了不起的工作", strategyR:"摘要",
+    writing:"寫一個人的工作", writingFocus:"寫出他做什麼、在哪裡工作",
+    value:"Work hard.", valueZh:"努力工作", project:"做一張最喜歡職業的海報",
+    quiz:[
+      {q:"Where ___ she work?", o:["does","do","is"], a:0, why:"she 用 does。"},
+      {q:"I ___ to be a vet.", o:["want","wants","wanting"], a:0, why:"I 後面用原形 want。"},
+      {q:"sing + er = ___", o:["singer","singor","singger"], a:0, why:"字尾加 -er 表示做這件事的人。"},
+      {q:"A ___ works in a restaurant and cooks food.", o:["chef","farmer","nurse"], a:0, why:"在餐廳煮菜的是廚師。"}
+    ]
+  },
+  {
+    n:9, en:"Let's Eat!", zh:"開動囉！", page:"p.146", term:2, weeks:[],
+    area:"Social Studies · Health and Physical Education",
+    goals:["談論食物","說出我喜歡吃什麼","有禮貌地要東西"],
+    v1:{label:"食物", strategy:"查字典", words:[
+      ["beans","豆子"],["bread","麵包"],["carrots","紅蘿蔔"],["corn","玉米"],
+      ["hamburgers","漢堡"],["ice cream","冰淇淋"],["mangoes","芒果"],["meat","肉"],
+      ["noodles","麵"],["pasta","義大利麵"],["peppers","甜椒"],["potatoes","馬鈴薯"],["tomatoes","番茄"]]},
+    v2:{label:"點心", strategy:"比較 /tʃ/ 和 /ʃ/ 的發音", words:[
+      ["cheese","起司"],["chips","洋芋片"],["grapes","葡萄"],["nuts","堅果"],
+      ["snacks","點心"],["yogurt","優格"]]},
+    g1:"any 的問答：Do you have any grapes?",
+    g2:"用 may 有禮貌地請求：May I have some bread, please?",
+    reading:"Super Snacks!", readingZh:"超級點心", strategyR:"掃讀找資訊",
+    writing:"寫你最喜歡的點心", writingFocus:"寫出點心的名字和為什麼喜歡",
+    value:"Eat good food.", valueZh:"吃健康的食物", project:"做全班的點心",
+    quiz:[
+      {q:"Do you have ___ grapes?", o:["any","a","an"], a:0, why:"疑問句的複數名詞前用 any。"},
+      {q:"___ I have some bread, please?", o:["May","Do","Am"], a:0, why:"有禮貌的請求用 May I…?"},
+      {q:"one potato, two ___", o:["potatoes","potatos","potatoe"], a:0, why:"字尾 o 加 es。"},
+      {q:"起司的英文是 ___", o:["cheese","chips","corn"], a:0, why:"起司＝cheese。"}
+    ]
+  }
+];
+
+/* ============================================================
+   狀態與儲存
+   ============================================================ */
+
+const state = {
+  view:"home", subject:null, unit:null, week:null, tab:"ref", entab:"week",
+  progress:{}, custom:{words:[], questions:[]}, db:null
+};
+const LS_KEY = "cindy-study-v2";
+
+function loadLocal(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw){
+      const o = JSON.parse(raw);
+      state.progress = o.progress || {};
+      state.custom = o.custom || {words:[], questions:[]};
+    }
+  }catch(e){}
+}
+function saveLocal(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({progress:state.progress, custom:state.custom})); }catch(e){}
+}
+let saveTimer = null;
+function save(){
+  saveLocal();
+  if(!state.db) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    try{
+      await state.db.doc("study/progress").set({units:state.progress, updatedAt:new Date().toISOString()});
+      await state.db.doc("study/custom").set({words:state.custom.words, questions:state.custom.questions});
+    }catch(e){
+      toast(e && e.code === "quota_exceeded" ? "儲存空間已滿，請先刪掉一些自訂題目" : "這次沒存到雲端，資料留在這台裝置");
+    }
+  }, 400);
+}
+async function initDb(){
+  if(!window.claude || typeof window.claude.use !== "function") return;
+  let db = null;
+  try{ db = await window.claude.use("db"); }catch(e){ db = null; }
+  if(!db) return;
+  state.db = db;
+  try{
+    const [p, c] = await Promise.all([db.doc("study/progress").get(), db.doc("study/custom").get()]);
+    if(p.exists) state.progress = Object.assign({}, (p.data().units)||{}, state.progress);
+    if(c.exists){ const d = c.data(); state.custom = {words:d.words||[], questions:d.questions||[]}; }
+    saveLocal(); render();
+  }catch(e){}
+}
+
+/* ============================================================
+   小工具
+   ============================================================ */
+const $ = (s, r)=> (r||document).querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4);
+
+let toastTimer = null;
+function toast(msg){
+  const el = $("#status"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=> el.classList.remove("show"), 2200);
+}
+function speak(text){
+  try{
+    if(!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US"; u.rate = 0.85; speechSynthesis.speak(u);
+  }catch(e){}
+}
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function fmtRange(w){
+  const f = s => s.slice(5).replace("-","/");
+  return f(w.s) + "–" + f(w.e);
+}
+function currentWeek(){
+  const t = todayISO();
+  for(const w of WEEKS){ if(t >= w.s && t <= w.e) return w; }
+  if(t < WEEKS[0].s) return WEEKS[0];
+  if(t > WEEKS[WEEKS.length-1].e) return WEEKS[WEEKS.length-1];
+  // 落在兩週之間（例如跨年假期）：取下一個尚未開始的週次
+  const next = WEEKS.find(w => t < w.s);
+  return next || WEEKS[WEEKS.length-1];
+}
+function sentenceOfWeek(){
+  const w = currentWeek();
+  return SENTENCES.find(s => s[0] === w.n) || SENTENCES[0];
+}
+
+/* progress helpers */
+function pget(k){ return state.progress[k] || {}; }
+function pset(k, patch){ state.progress[k] = Object.assign({}, state.progress[k], patch); save(); }
+const wordWeeks = WEEKS.filter(w => w.words.length);
+function weekPct(){
+  const done = wordWeeks.filter(w => pget("wk"+w.n).learned).length;
+  return Math.round(done / wordWeeks.length * 100);
+}
+function sentDone(){ return (pget("sent").done) || {}; }
+function sentPct(){ return Math.round(Object.keys(sentDone()).length / SENTENCES.length * 100); }
+function unitScore(n){
+  const p = pget("u"+n); let d = 0;
+  if(p.ref) d++; if(p.cards) d++; if((p.quiz||0)>=60) d++; if((p.spell||0)>=60) d++;
+  return d;
+}
+
+/* word sources */
+function schoolWordsForUnit(u){
+  const out = [];
+  u.weeks.forEach(n => {
+    const w = WEEKS.find(x => x.n === n);
+    if(w) w.words.forEach(p => out.push({en:p[0], zh:p[1]}));
+  });
+  return out;
+}
+function customWords(unitN){
+  return state.custom.words
+    .filter(w => w.subject === "english" && String(w.unit) === String(unitN))
+    .map(w => ({en:w.en, zh:w.zh, mine:true}));
+}
+function unitAllWords(u){
+  const seen = {}, out = [];
+  const push = w => { const k = w.en.toLowerCase(); if(!seen[k]){ seen[k]=1; out.push(w); } };
+  schoolWordsForUnit(u).forEach(push);
+  if(u.v1) u.v1.words.forEach(p => push({en:p[0], zh:p[1]}));
+  if(u.v2) u.v2.words.forEach(p => push({en:p[0], zh:p[1]}));
+  customWords(u.n).forEach(push);
+  return out;
+}
+const ALL_SCHOOL_WORDS = (()=>{ const a=[]; WEEKS.forEach(w => w.words.forEach(p => a.push({en:p[0], zh:p[1]}))); return a; })();
+
+/* ============================================================
+   路由
+   ============================================================ */
+const app = $("#app");
+function go(view, opts){
+  Object.assign(state, {view}, opts || {});
+  window.scrollTo({top:0});
+  render();
+}
+function render(){
+  document.querySelectorAll("#topnav button").forEach(b =>
+    b.setAttribute("aria-current", String(b.dataset.go === state.view)));
+  ({home:renderHome, subject:renderSubject, unit:renderUnit, week:renderWeek,
+    progress:renderProgress, parent:renderParent}[state.view] || renderHome)();
+}
+function crumb(links, current){
+  return `<nav class="crumb">${links.map(l =>
+    `<button data-crumb="${l[1]}">${esc(l[0])}</button><span>/</span>`).join("")}<span>${esc(current)}</span></nav>`;
+}
+function bindCrumb(){
+  app.querySelectorAll("[data-crumb]").forEach(b => b.onclick = () => {
+    const t = b.dataset.crumb;
+    if(t === "english") go("subject", {subject:"english"});
+    else go(t);
+  });
+}
+function ringSvg(pct, color){
+  const r=30, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg width="76" height="76" viewBox="0 0 76 76" aria-hidden="true">
+    <circle cx="38" cy="38" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="8"></circle>
+    <circle cx="38" cy="38" r="${r}" fill="none" stroke="${color||"var(--gold)"}" stroke-width="8"
+      stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
+      transform="rotate(-90 38 38)"></circle></svg>`;
+}
+function footer(){
+  return `<p class="footer">英語內容依據${esc(TERM.school)}${esc(TERM.term)}二年級單字表（${esc(TERM.book)}）與每週一句整理。
+  Unit 5–9 為下學期範圍，先放著預習。國語、數學、自然、社會、其他等科目待教材上傳後補上。</p>`;
+}
+function wordCard(w){
+  return `<div class="word">
+    <span class="w-en">${esc(w.en)}${w.mine ? ' <span class="muted">·自訂</span>' : ""}</span>
+    <span class="w-zh">${esc(w.zh)}</span>
+    <button class="speak" data-speak="${esc(w.en)}" aria-label="唸出 ${esc(w.en)}">🔊</button></div>`;
+}
+function bindSpeak(root){
+  (root||app).querySelectorAll("[data-speak]").forEach(b => b.onclick = () => speak(b.dataset.speak));
+}
+
+/* ============================================================
+   首頁
+   ============================================================ */
+function renderHome(){
+  const w = currentWeek(), s = sentenceOfWeek();
+  const wp = weekPct();
+  const cards = SUBJECTS.map(sub => {
+    const mine = state.custom.words.filter(x => x.subject === sub.id).length
+               + state.custom.questions.filter(x => x.subject === sub.id).length;
+    const desc = sub.ready ? sub.desc : (mine ? `媽媽加了 ${mine} 筆自訂內容` : sub.desc);
+    return `<button class="subj" style="--sc:var(${sub.css})" data-subject="${sub.id}">
+      <span class="subj-ico">${esc(sub.ico)}</span>
+      <span class="subj-main">
+        <strong>${esc(sub.name)}${sub.ready ? "" : '<span class="chip-soon">待補教材</span>'}</strong>
+        <span class="subj-desc">${esc(desc)}</span>
+      </span><span class="subj-arrow">→</span></button>`;
+  }).join("");
+
+  app.innerHTML = `
+    <section class="week-hero">
+      <div class="wk-top">
+        <span class="wk-n">第 ${w.n} 週</span>
+        <span class="wk-d">${esc(fmtRange(w))}</span>
+        ${w.note ? `<span class="exam-flag">${esc(w.note)}</span>` : ""}
+      </div>
+      <p class="wk-u">${w.unit ? "課程進度：" + esc(w.unit) : "本週沒有新單字，好好複習！"}</p>
+      ${w.words.length ? `<h2>本週背讀單字（${w.words.length}）</h2>
+        <div class="wordlist compact" style="margin-top:8px">${w.words.map(p => wordCard({en:p[0], zh:p[1]})).join("")}</div>
+        <div class="btn-row" style="margin-top:14px">
+          <button class="btn primary" data-wk="${w.n}">開始練這週</button>
+        </div>` : ""}
+      <div class="sentence-box">
+        <div class="muted" style="font-size:12px; letter-spacing:.1em">第 ${s[0]} 週 · 每週一句</div>
+        <div class="s-en">${esc(s[1])}</div>
+        <div class="s-zh">${esc(s[2])}</div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn small" data-speak="${esc(s[1])}">🔊 聽一次</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="hero" style="margin-top:0">
+      <div class="hero-text"><h2>英語總進度</h2>
+        <p>單字週 ${wordWeeks.filter(x=>pget("wk"+x.n).learned).length} / ${wordWeeks.length} 週背熟 · 每週一句 ${Object.keys(sentDone()).length} / ${SENTENCES.length} 句會念</p></div>
+      <div class="ring">${ringSvg(wp)}<div class="rlabel"><b>${wp}%</b>單字進度</div></div>
+    </div>
+
+    <p class="eyebrow">六個科目</p>
+    <div class="subjects">${cards}</div>
+    ${footer()}`;
+
+  bindSpeak();
+  app.querySelectorAll("[data-subject]").forEach(b => b.onclick = () => go("subject", {subject:b.dataset.subject}));
+  const wb = app.querySelector("[data-wk]");
+  if(wb) wb.onclick = () => go("week", {week:Number(wb.dataset.wk), tab:"list"});
+}
+
+/* ============================================================
+   科目頁
+   ============================================================ */
+function renderSubject(){
+  const s = SUBJECTS.find(x => x.id === state.subject);
+  if(!s) return go("home");
+  if(s.id !== "english") return renderOtherSubject(s);
+
+  const tabs = [["week","每週單字"],["sentence","每週一句"],["unit","課本單元"]];
+  app.innerHTML = `
+    ${crumb([["首頁","home"]], "English")}
+    <div class="page-head">
+      <p class="eyebrow" style="margin-bottom:6px">${esc(TERM.book)} · ${esc(TERM.term)}</p>
+      <h2>English</h2>
+      <p>學校這學期上到 Unit 4，共 21 週。跟著每週單字表和每週一句練，考前再看課本單元的重點速查。</p>
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(t =>
+      `<button role="tab" data-entab="${t[0]}" aria-selected="${state.entab===t[0]}">${t[1]}</button>`).join("")}</div>
+    <div id="panel"></div>
+    ${footer()}`;
+  bindCrumb();
+  app.querySelectorAll("[data-entab]").forEach(b => b.onclick = () => { state.entab = b.dataset.entab; renderSubject(); });
+  const panel = $("#panel");
+  if(state.entab === "week") panelWeeks(panel);
+  else if(state.entab === "sentence") panelSentences(panel);
+  else panelUnits(panel);
+}
+
+function renderOtherSubject(s){
+  const words = state.custom.words.filter(w => w.subject === s.id);
+  const qs = state.custom.questions.filter(q => q.subject === s.id);
+  app.innerHTML = `
+    ${crumb([["首頁","home"]], s.name)}
+    <div class="page-head"><h2>${esc(s.name)}</h2><p>${esc(s.desc)}</p></div>
+    <div class="note"><strong>教材還沒放進來。</strong><br>
+      把課本目錄、單字表或進度表傳給我（拍照或 PDF 都可以），我就會像英語一樣，把每週進度、單字和練習題整理進來。
+      在那之前，家長區加的內容會直接出現在下面。</div>
+    ${words.length ? `<div class="sec"><h3>自訂單字／詞語（${words.length}）</h3>
+      <div class="wordlist">${words.map(w => wordCard({en:w.en, zh:w.zh})).join("")}</div></div>` : ""}
+    ${qs.length ? `<div class="sec"><h3>自訂題目（${qs.length}）</h3><div class="kv">${qs.map(q =>
+      `<div class="kv-row"><div class="kv-k">題目</div><div class="kv-v">${esc(q.q)}
+      <div class="muted" style="margin-top:4px">答案：${esc(q.a)}</div></div></div>`).join("")}</div></div>` : ""}
+    <div class="sec"><button class="btn" id="topar">到家長區加內容</button></div>
+    ${footer()}`;
+  bindCrumb(); bindSpeak();
+  $("#topar").onclick = () => go("parent");
+}
+
+/* ---------- 每週單字表 ---------- */
+function panelWeeks(panel){
+  const now = currentWeek();
+  const rows = WEEKS.map(w => {
+    const p = pget("wk"+w.n);
+    const isNow = w.n === now.n;
+    if(!w.words.length){
+      return `<div class="row exam">
+        <span class="rnum">${w.exam ? "考" : "複"}</span>
+        <span class="rmain"><span class="rt">第 ${w.n} 週 · ${esc(w.note || "複習週")}</span>
+        <span class="rs">${esc(fmtRange(w))}</span></span>
+        ${isNow ? '<span class="rtag" style="background:var(--gold);color:#fff">本週</span>' : ""}</div>`;
+    }
+    return `<button class="row ${p.learned?"done":""} ${isNow?"now":""}" data-wk="${w.n}">
+      <span class="rnum">${w.n}</span>
+      <span class="rmain">
+        <span class="rt">${esc(w.unit)}${w.note ? ` · <span style="color:var(--bad)">${esc(w.note)}</span>` : ""}</span>
+        <span class="rs">${esc(fmtRange(w))} · ${w.words.length} 個字</span>
+        <span class="rw">${esc(w.words.map(x=>x[0]).join(" · "))}</span>
+      </span>
+      <span class="rtag ${p.learned?"ok":""}">${p.learned ? "已背熟" : (p.quiz ? p.quiz+"分" : "未練")}</span>
+    </button>`;
+  }).join("");
+  panel.innerHTML = `<div class="rows">${rows}</div>`;
+  panel.querySelectorAll("[data-wk]").forEach(b =>
+    b.onclick = () => go("week", {week:Number(b.dataset.wk), tab:"list"}));
+}
+
+/* ---------- 每週一句 ---------- */
+function panelSentences(panel){
+  const done = sentDone();
+  const now = currentWeek().n;
+  panel.innerHTML = `
+    <div class="hero" style="margin-top:0">
+      <div class="hero-text"><h2>每週一句</h2><p>上課會用到的 20 句話。點 🔊 跟著唸，會念了就打勾。</p></div>
+      <div class="ring">${ringSvg(sentPct(), "var(--accent)")}<div class="rlabel"><b>${sentPct()}%</b>會念了</div></div>
+    </div>
+    <div class="btn-row" style="margin-bottom:16px">
+      <button class="btn primary" id="sq">句子測驗（中翻英 10 題）</button>
+    </div>
+    <div class="rows">${SENTENCES.map(s => `
+      <div class="sent ${done[s[0]]?"ok":""}">
+        <span class="sn">${s[0]}</span>
+        <span class="sm"><span class="se">${esc(s[1])}</span><span class="sz">${esc(s[2])}</span>
+        ${s[0]===now ? '<span class="rtag" style="background:var(--gold);color:#fff;margin-top:4px;display:inline-block">本週</span>' : ""}</span>
+        <span class="sa">
+          <button class="speak" data-speak="${esc(s[1])}" aria-label="唸出第 ${s[0]} 句">🔊</button>
+          <button class="speak" data-tick="${s[0]}" aria-label="標記會念了">${done[s[0]] ? "✓" : "○"}</button>
+        </span>
+      </div>`).join("")}</div>`;
+  bindSpeak(panel);
+  panel.querySelectorAll("[data-tick]").forEach(b => b.onclick = () => {
+    const n = b.dataset.tick, d = Object.assign({}, sentDone());
+    if(d[n]) delete d[n]; else d[n] = true;
+    pset("sent", {done:d});
+    renderSubject();
+  });
+  $("#sq").onclick = () => {
+    const qs = shuffle(SENTENCES).slice(0,10).map(s => {
+      const others = shuffle(SENTENCES.filter(x => x[0] !== s[0])).slice(0,3).map(x => x[1]);
+      const opts = shuffle([s[1]].concat(others));
+      return {kind:"每週一句", q:`「${esc(s[2])}」的英文是？`, o:opts, a:opts.indexOf(s[1]), why:s[1], say:s[1], enOpts:true};
+    });
+    app.innerHTML = `${crumb([["首頁","home"],["English","english"]], "句子測驗")}
+      <div class="page-head"><h2>每週一句 · 中翻英</h2><p>從 20 句裡隨機抽 10 題。</p></div><div id="panel"></div>`;
+    bindCrumb();
+    runQuiz($("#panel"), qs, "每週一句測驗", ()=>{}, () => go("subject",{subject:"english", entab:"sentence"}));
+  };
+}
+
+/* ---------- 課本單元 ---------- */
+function panelUnits(panel){
+  const row = u => {
+    const sc = unitScore(u.n);
+    return `<button class="row ${sc===4?"done":""}" data-unit="${u.n}">
+      <span class="rnum">${u.n}</span>
+      <span class="rmain">
+        <span class="rt"><span class="en">${esc(u.en)}</span> ${esc(u.zh)}</span>
+        <span class="rs">${esc(u.page)}${u.weeks.length ? " · 第 " + u.weeks[0] + "–" + u.weeks[u.weeks.length-1] + " 週" : ""}</span>
+        <span class="bar"><i style="width:${sc/4*100}%"></i></span>
+      </span>
+      <span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></button>`;
+  };
+  panel.innerHTML = `
+    <div class="btn-row" style="margin-bottom:18px">
+      <button class="btn primary" id="chal">綜合大挑戰（本學期隨機 12 題）</button>
+    </div>
+    <div class="sec" style="margin-top:0"><h3>本學期 · Unit 0–4</h3>
+      <div class="rows">${UNITS.filter(u=>u.term===1).map(row).join("")}</div></div>
+    <div class="sec"><h3>下學期預習 · Unit 5–9</h3>
+      <div class="rows">${UNITS.filter(u=>u.term===2).map(row).join("")}</div></div>`;
+  panel.querySelectorAll("[data-unit]").forEach(b =>
+    b.onclick = () => go("unit", {unit:Number(b.dataset.unit), tab:"ref"}));
+  $("#chal").onclick = startChallenge;
+}
+
+/* ============================================================
+   週次練習頁
+   ============================================================ */
+function renderWeek(){
+  const w = WEEKS.find(x => x.n === state.week);
+  if(!w || !w.words.length) return go("subject", {subject:"english", entab:"week"});
+  const words = w.words.map(p => ({en:p[0], zh:p[1]}));
+  const p = pget("wk"+w.n);
+  const tabs = [["list","單字表"],["cards","閃卡"],["quiz","測驗"],["spell","拼字"]];
+  app.innerHTML = `
+    ${crumb([["首頁","home"],["English","english"]], "第 " + w.n + " 週")}
+    <div class="page-head">
+      <p class="eyebrow" style="margin-bottom:6px">第 ${w.n} 週 · ${esc(fmtRange(w))}</p>
+      <h2>${esc(w.unit)} 背讀單字</h2>
+      <p>${w.words.length} 個字${w.note ? ` · 這週有 ${esc(w.note)}` : ""}</p>
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(t =>
+      `<button role="tab" data-tab="${t[0]}" aria-selected="${state.tab===t[0]}">${t[1]}</button>`).join("")}</div>
+    <div id="panel"></div>
+    ${footer()}`;
+  bindCrumb();
+  app.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { state.tab = b.dataset.tab; renderWeek(); });
+  const panel = $("#panel");
+  if(state.tab === "list"){
+    panel.innerHTML = `<div class="wordlist">${words.map(wordCard).join("")}</div>
+      <div class="btn-row" style="margin-top:18px">
+        <button class="btn small" id="all">🔊 全部唸一遍</button>
+        <button class="btn ${p.learned?"":"primary"}" id="mark">${p.learned ? "✓ 已背熟（點一下取消）" : "我背熟了"}</button>
+      </div>`;
+    bindSpeak(panel);
+    $("#all").onclick = () => speak(words.map(x=>x.en).join(", "));
+    $("#mark").onclick = () => { pset("wk"+w.n, {learned:!p.learned}); renderWeek(); };
+  }
+  if(state.tab === "cards") makeCards(panel, words, () => { toast("這週閃卡看完了！"); });
+  if(state.tab === "quiz"){
+    const qs = buildWordQuiz(words, ALL_SCHOOL_WORDS, [], Math.min(12, words.length*2));
+    runQuiz(panel, qs, `第 ${w.n} 週測驗`, sc => pset("wk"+w.n, {quiz:Math.max(p.quiz||0, sc)}), () => { state.tab="list"; renderWeek(); });
+  }
+  if(state.tab === "spell") makeSpell(panel, words, sc => pset("wk"+w.n, {spell:Math.max(p.spell||0, sc)}), () => { state.tab="list"; renderWeek(); });
+}
+
+/* ============================================================
+   單元頁
+   ============================================================ */
+function renderUnit(){
+  const u = UNITS.find(x => x.n === state.unit);
+  if(!u) return go("subject", {subject:"english", entab:"unit"});
+  const tabs = [["ref","重點速查"],["cards","單字閃卡"],["quiz","選擇題"],["spell","拼字練習"]];
+  app.innerHTML = `
+    ${crumb([["首頁","home"],["English","english"]], "Unit " + u.n)}
+    <div class="page-head">
+      <p class="eyebrow" style="margin-bottom:6px">Unit ${u.n} · ${esc(u.page)}${u.term===2 ? " · 下學期" : ""}</p>
+      <h2><span class="en">${esc(u.en)}</span> ${esc(u.zh)}</h2>
+      <p>${esc(u.area)}</p>
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(t =>
+      `<button role="tab" data-tab="${t[0]}" aria-selected="${state.tab===t[0]}">${t[1]}</button>`).join("")}</div>
+    <div id="panel"></div>
+    ${footer()}`;
+  bindCrumb();
+  app.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { state.tab = b.dataset.tab; renderUnit(); });
+  const panel = $("#panel");
+  const words = unitAllWords(u);
+  const p = pget("u"+u.n);
+  if(state.tab === "ref") renderRef(u, panel);
+  if(state.tab === "cards") makeCards(panel, words, () => { pset("u"+u.n, {cards:true}); toast("單字閃卡完成！"); });
+  if(state.tab === "quiz"){
+    const qs = buildWordQuiz(words, words.concat(ALL_SCHOOL_WORDS), unitQuestions(u), 10);
+    if(qs.length < 4){ panel.innerHTML = `<div class="note">這個單元的題目還不夠。</div>`; return; }
+    runQuiz(panel, qs, `Unit ${u.n} 測驗`, sc => pset("u"+u.n, {quiz:Math.max(p.quiz||0, sc)}), () => { state.tab="ref"; renderUnit(); });
+  }
+  if(state.tab === "spell") makeSpell(panel, words, sc => pset("u"+u.n, {spell:Math.max(p.spell||0, sc)}), () => { state.tab="ref"; renderUnit(); });
+}
+
+function unitQuestions(u){
+  const list = u.quiz.map(q => Object.assign({}, q));
+  state.custom.questions
+    .filter(q => q.subject === "english" && String(q.unit) === String(u.n) && q.opts && q.opts.length >= 2)
+    .forEach(q => list.push({q:esc(q.q), o:[q.a].concat(q.opts), a:0, why:q.note || "媽媽出的題目", mine:true}));
+  return list;
+}
+
+function renderRef(u, panel){
+  const kv = [];
+  if(u.g1) kv.push(["句型 1", esc(u.g1)]);
+  if(u.g2) kv.push(["句型 2", esc(u.g2)]);
+  if(u.reading) kv.push(["閱讀", `<span class="en">${esc(u.reading)}</span>（${esc(u.readingZh)}）<br><span class="muted">策略：${esc(u.strategyR)}</span>`]);
+  if(u.writing) kv.push(["寫作", `${esc(u.writing)}<br><span class="muted">重點：${esc(u.writingFocus)}</span>`]);
+  if(u.value) kv.push(["品格", `<span class="en">${esc(u.value)}</span> ${esc(u.valueZh)}`]);
+  if(u.project) kv.push(["專題", esc(u.project)]);
+  const school = schoolWordsForUnit(u), mine = customWords(u.n);
+  const p = pget("u"+u.n);
+
+  panel.innerHTML = `
+    <div class="sec" style="margin-top:0"><h3>學習目標</h3>
+      <ul class="goal-list">${u.goals.map(g => `<li>${esc(g)}</li>`).join("")}</ul></div>
+    ${school.length ? `<div class="sec"><h3>學校背讀單字（${school.length}）</h3>
+      <span class="tag">第 ${u.weeks[0]}–${u.weeks[u.weeks.length-1]} 週要背</span>
+      <div class="wordlist" style="margin-top:8px">${school.map(wordCard).join("")}</div></div>` : ""}
+    ${u.v1 ? `<div class="sec"><h3>課本單字 · ${esc(u.v1.label)}</h3>
+      ${u.v1.strategy ? `<span class="tag">${esc(u.v1.strategy)}</span>` : ""}
+      <div class="wordlist" style="margin-top:8px">${u.v1.words.map(x => wordCard({en:x[0],zh:x[1]})).join("")}</div></div>` : ""}
+    ${u.v2 ? `<div class="sec"><h3>課本單字 · ${esc(u.v2.label)}</h3>
+      ${u.v2.strategy ? `<span class="tag">${esc(u.v2.strategy)}</span>` : ""}
+      <div class="wordlist" style="margin-top:8px">${u.v2.words.map(x => wordCard({en:x[0],zh:x[1]})).join("")}</div></div>` : ""}
+    ${mine.length ? `<div class="sec"><h3>媽媽加的單字（${mine.length}）</h3>
+      <div class="wordlist">${mine.map(wordCard).join("")}</div></div>` : ""}
+    <div class="sec"><h3>句型與內容</h3>
+      <div class="kv">${kv.map(r => `<div class="kv-row"><div class="kv-k">${r[0]}</div><div class="kv-v">${r[1]}</div></div>`).join("")}</div></div>
+    <div class="sec"><button class="btn ${p.ref?"":"primary"}" id="mk">${p.ref ? "✓ 已讀過（點一下取消）" : "我讀完重點了"}</button></div>`;
+  bindSpeak(panel);
+  $("#mk").onclick = () => { pset("u"+u.n, {ref:!p.ref}); renderUnit(); };
+}
+
+/* ============================================================
+   練習引擎：閃卡 / 測驗 / 拼字
+   ============================================================ */
+function makeCards(panel, words, onComplete){
+  if(!words.length){ panel.innerHTML = `<div class="note">這裡還沒有單字。</div>`; return; }
+  const list = shuffle(words);
+  let i = 0, flipped = false, mode = "en";
+  panel.innerHTML = `<div class="fc-wrap">
+    <div class="btn-row" style="justify-content:center">
+      <button class="btn small" data-mode="en">先看英文</button>
+      <button class="btn small" data-mode="zh">先看中文</button></div>
+    <button class="fc" id="card"></button>
+    <div class="fc-bar">
+      <button class="btn" id="prev" style="flex:1">← 上一張</button>
+      <span class="count" id="cnt"></span>
+      <button class="btn primary" id="next" style="flex:1">下一張 →</button></div>
+    <button class="btn small" id="say">🔊 唸這個字</button></div>`;
+  const card = $("#card");
+  function draw(){
+    const w = list[i], showEn = (mode === "en") !== flipped;
+    card.innerHTML = showEn
+      ? `<div><div class="fc-main">${esc(w.en)}</div><div class="fc-sub"></div><div class="fc-hint">點卡片看中文</div></div>`
+      : `<div><div class="fc-main zh">${esc(w.zh)}</div><div class="fc-sub en">${flipped && mode==="en" ? "" : (flipped ? esc(w.en) : "")}</div><div class="fc-hint">點卡片翻面</div></div>`;
+    $("#cnt").textContent = (i+1) + " / " + list.length;
+  }
+  card.onclick = () => { flipped = !flipped; draw(); speak(list[i].en); };
+  $("#prev").onclick = () => { i = (i-1+list.length)%list.length; flipped = false; draw(); };
+  $("#next").onclick = () => {
+    if(i === list.length-1 && onComplete) onComplete();
+    i = (i+1)%list.length; flipped = false; draw();
+  };
+  panel.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => { mode = b.dataset.mode; flipped = false; draw(); });
+  $("#say").onclick = () => speak(list[i].en);
+  draw();
+}
+
+function buildWordQuiz(words, pool, extraQs, count){
+  const items = [];
+  words.forEach(w => {
+    const others = shuffle(pool.filter(x => x.en !== w.en && x.zh !== w.zh)).slice(0,2);
+    if(others.length < 2) return;
+    items.push({kind:"英翻中", q:`<span class="en">${esc(w.en)}</span> 的意思是？`,
+      o:[w.zh].concat(others.map(x=>x.zh)), a:0, why:`${w.en} ＝ ${w.zh}`, say:w.en});
+    items.push({kind:"中翻英", q:`「${esc(w.zh)}」的英文是？`,
+      o:[w.en].concat(others.map(x=>x.en)), a:0, why:`${w.zh} ＝ ${w.en}`, say:w.en, enOpts:true});
+  });
+  (extraQs||[]).forEach(g => items.push({kind:g.mine ? "媽媽出題" : "句型", q:g.q, o:g.o, a:g.a, why:g.why}));
+  return shuffle(items).slice(0, count).map(it => {
+    const correct = it.o[it.a], opts = shuffle(it.o);
+    return Object.assign({}, it, {o:opts, a:opts.indexOf(correct)});
+  });
+}
+
+function startChallenge(){
+  const all = [];
+  UNITS.filter(u => u.term === 1).forEach(u => {
+    const w = unitAllWords(u);
+    if(w.length >= 3) all.push.apply(all, buildWordQuiz(w, ALL_SCHOOL_WORDS, unitQuestions(u), 4));
+  });
+  const qs = shuffle(all).slice(0, 12);
+  app.innerHTML = `${crumb([["首頁","home"],["English","english"]], "綜合大挑戰")}
+    <div class="page-head"><h2>綜合大挑戰</h2><p>從本學期 Unit 0–4 隨機抽 12 題，看看記得多少。</p></div>
+    <div id="panel"></div>`;
+  bindCrumb();
+  runQuiz($("#panel"), qs, "綜合大挑戰", ()=>{}, () => go("subject", {subject:"english", entab:"unit"}));
+}
+
+function runQuiz(panel, qs, label, onDone, onBack){
+  if(!qs.length){ panel.innerHTML = `<div class="note">題目還不夠，先去看單字表吧。</div>`; return; }
+  let i = 0, right = 0, answered = false;
+  panel.innerHTML = `<div class="quiz">
+    <div class="qprog"><span class="bar"><i id="qbar" style="width:0%"></i></span><span id="qnum"></span></div>
+    <div class="qcard" id="qcard"></div></div>`;
+  const bar = $("#qbar"), num = $("#qnum"), card = $("#qcard");
+
+  function draw(){
+    const q = qs[i]; answered = false;
+    bar.style.width = (i / qs.length * 100) + "%";
+    num.textContent = (i+1) + "/" + qs.length;
+    card.innerHTML = `<div class="qkind">${esc(q.kind || "題目")}</div>
+      <p class="qtext">${q.q}</p>
+      <div class="opts">${q.o.map((o,k) =>
+        `<button class="opt ${q.enOpts?"en":""}" data-i="${k}">${esc(o)}</button>`).join("")}</div>
+      <div class="feedback" id="fb"></div>
+      <div class="btn-row" style="margin-top:14px; display:none" id="nr">
+        <button class="btn primary wide" id="nb">${i === qs.length-1 ? "看成績" : "下一題"}</button></div>`;
+    card.querySelectorAll(".opt").forEach(b => b.onclick = () => choose(Number(b.dataset.i)));
+    $("#nb").onclick = () => { i++; if(i < qs.length) draw(); else finish(); };
+  }
+  function choose(idx){
+    if(answered) return; answered = true;
+    const q = qs[i];
+    card.querySelectorAll(".opt").forEach((b,k) => {
+      b.disabled = true;
+      if(k === q.a) b.classList.add("right");
+      else if(k === idx) b.classList.add("wrong");
+    });
+    const ok = idx === q.a; if(ok) right++;
+    const fb = $("#fb");
+    fb.className = "feedback show " + (ok ? "ok" : "no");
+    fb.textContent = (ok ? "答對了！" : "再看一次：") + (q.why || "");
+    if(q.say) speak(q.say);
+    $("#nr").style.display = "flex";
+  }
+  function finish(){
+    const score = Math.round(right / qs.length * 100);
+    bar.style.width = "100%"; num.textContent = qs.length + "/" + qs.length;
+    const msg = score === 100 ? "全部答對，太厲害了！"
+      : score >= 80 ? "很棒！只差一點點就滿分。"
+      : score >= 60 ? "有進步，再練一次會更好。" : "先回去看單字表，再來挑戰一次。";
+    card.innerHTML = `<div class="result"><div class="qkind">${esc(label)}</div>
+      <div class="big">${score}<span style="font-size:22px">分</span></div>
+      <p class="msg">答對 ${right} / ${qs.length} 題。${msg}</p>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn primary" id="ag">再做一次</button>
+        <button class="btn" id="bk">回上一頁</button></div></div>`;
+    onDone(score);
+    $("#ag").onclick = () => { i = 0; right = 0; draw(); };
+    $("#bk").onclick = onBack;
+  }
+  draw();
+}
+
+function makeSpell(panel, words, onDone, onBack){
+  const items = words.filter(w => /^[a-zA-Z ]{3,14}$/.test(w.en));
+  if(items.length < 3){ panel.innerHTML = `<div class="note">這裡的字不適合拼字練習，換個單元或週次試試。</div>`; return; }
+  const list = shuffle(items).slice(0, Math.min(8, items.length));
+  let i = 0, right = 0;
+  panel.innerHTML = `<div class="quiz">
+    <div class="qprog"><span class="bar"><i id="sbar" style="width:0%"></i></span><span id="snum"></span></div>
+    <div class="qcard" id="scard"></div></div>`;
+  const bar = $("#sbar"), num = $("#snum"), card = $("#scard");
+
+  function draw(){
+    const w = list[i];
+    const target = w.en.toLowerCase();
+    const letters = shuffle(target.replace(/ /g,"").split(""));
+    let built = [];
+    bar.style.width = (i / list.length * 100) + "%";
+    num.textContent = (i+1) + "/" + list.length;
+    card.innerHTML = `<div class="qkind">把字母排成正確的單字</div>
+      <div class="sp-target"><div class="zh">${esc(w.zh)}</div>
+        <button class="btn small" id="hear" style="margin-top:8px">🔊 聽一次</button></div>
+      <div class="sp-slots" id="slots"></div>
+      <div class="sp-pool" id="pool">${letters.map((L,k) => `<button class="tile" data-k="${k}">${esc(L)}</button>`).join("")}</div>
+      <div class="feedback" id="sfb"></div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn small" id="clr">清除</button>
+        <button class="btn small" id="skp">看答案</button></div>`;
+    const slots = $("#slots"), pool = $("#pool"), fb = $("#sfb");
+    $("#hear").onclick = () => speak(w.en);
+    const shape = target.split("");
+    function drawSlots(){
+      let bi = 0;
+      const html = shape.map(ch => {
+        if(ch === " ") return `<span class="slot gap"></span>`;
+        const letter = built[bi];
+        bi++;
+        return `<span class="slot ${letter ? "filled" : ""}">${letter ? esc(letter) : ""}</span>`;
+      });
+      slots.innerHTML = html.join("");
+    }
+    function check(){
+      const need = target.replace(/ /g,"");
+      if(built.length !== need.length) return;
+      const ok = built.join("") === need;
+      fb.className = "feedback show " + (ok ? "ok" : "no");
+      if(ok){ right++; speak(w.en); fb.textContent = `${w.en} — 拼對了！`; setTimeout(next, 900); }
+      else fb.textContent = "再試一次，把字母清掉重排看看。";
+    }
+    function next(){
+      i++;
+      if(i < list.length) return draw();
+      const score = Math.round(right / list.length * 100);
+      bar.style.width = "100%"; onDone(score);
+      card.innerHTML = `<div class="result"><div class="qkind">拼字練習</div>
+        <div class="big">${score}<span style="font-size:22px">分</span></div>
+        <p class="msg">拼對 ${right} / ${list.length} 個單字。</p>
+        <div class="btn-row" style="justify-content:center">
+          <button class="btn primary" id="ag2">再練一次</button>
+          <button class="btn" id="bk2">回上一頁</button></div></div>`;
+      $("#ag2").onclick = () => makeSpell(panel, words, onDone, onBack);
+      $("#bk2").onclick = onBack;
+    }
+    pool.querySelectorAll(".tile").forEach(b => b.onclick = () => {
+      if(b.disabled || built.length >= target.replace(/ /g,"").length) return;
+      b.disabled = true; built.push(b.textContent); drawSlots(); check();
+    });
+    $("#clr").onclick = () => { built = []; pool.querySelectorAll(".tile").forEach(b => b.disabled = false); fb.className = "feedback"; drawSlots(); };
+    $("#skp").onclick = () => { fb.className = "feedback show no"; fb.textContent = `答案是 ${w.en}`; speak(w.en); setTimeout(next, 1500); };
+    drawSlots();
+  }
+  draw();
+}
+
+/* ============================================================
+   進度頁
+   ============================================================ */
+function renderProgress(){
+  const wp = weekPct(), sp = sentPct();
+  const wrows = wordWeeks.map(w => {
+    const p = pget("wk"+w.n);
+    const pill = v => v == null ? `<span class="pill no">未做</span>`
+      : `<span class="pill ${v>=80?"ok":v>=60?"mid":"no"}">${v}</span>`;
+    return `<tr>
+      <td><strong>第 ${w.n} 週</strong><div class="muted">${esc(w.unit)} · ${esc(fmtRange(w))}</div></td>
+      <td>${p.learned ? `<span class="pill ok">背熟</span>` : `<span class="pill no">還沒</span>`}</td>
+      <td>${pill(p.quiz)}</td><td>${pill(p.spell)}</td></tr>`;
+  }).join("");
+  const urows = UNITS.filter(u=>u.term===1).map(u => {
+    const p = pget("u"+u.n), sc = unitScore(u.n);
+    const pill = v => v == null ? `<span class="pill no">未做</span>`
+      : `<span class="pill ${v>=80?"ok":v>=60?"mid":"no"}">${v}</span>`;
+    return `<tr>
+      <td><strong>${u.n}</strong> <span class="en">${esc(u.en)}</span></td>
+      <td>${p.ref ? `<span class="pill ok">已讀</span>` : `<span class="pill no">未讀</span>`}</td>
+      <td>${p.cards ? `<span class="pill ok">看完</span>` : `<span class="pill no">未做</span>`}</td>
+      <td>${pill(p.quiz)}</td><td>${pill(p.spell)}</td>
+      <td class="num"><span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></td></tr>`;
+  }).join("");
+
+  app.innerHTML = `
+    ${crumb([["首頁","home"]], "進度")}
+    <div class="page-head"><h2>複習進度</h2>
+      <p>${state.db ? "進度會存到雲端，換裝置也看得到。" : "進度存在這台裝置上。"}</p></div>
+    <div class="hero" style="margin-top:0">
+      <div class="hero-text"><h2 style="font-size:19px">每週背讀單字</h2>
+        <p>${wordWeeks.filter(w=>pget("wk"+w.n).learned).length} / ${wordWeeks.length} 週已背熟</p></div>
+      <div class="ring">${ringSvg(wp)}<div class="rlabel"><b>${wp}%</b></div></div>
+    </div>
+    <div class="hero">
+      <div class="hero-text"><h2 style="font-size:19px">每週一句</h2>
+        <p>${Object.keys(sentDone()).length} / ${SENTENCES.length} 句會念了</p></div>
+      <div class="ring">${ringSvg(sp,"var(--accent)")}<div class="rlabel"><b>${sp}%</b></div></div>
+    </div>
+    <div class="sec"><h3>每週單字明細</h3><div class="scroll-x"><table class="ptable">
+      <thead><tr><th>週次</th><th>背熟</th><th>測驗</th><th>拼字</th></tr></thead>
+      <tbody>${wrows}</tbody></table></div></div>
+    <div class="sec"><h3>課本單元（本學期）</h3><div class="scroll-x"><table class="ptable">
+      <thead><tr><th>單元</th><th>重點</th><th>閃卡</th><th>測驗</th><th>拼字</th><th style="text-align:right">星星</th></tr></thead>
+      <tbody>${urows}</tbody></table></div></div>
+    <div class="sec"><button class="btn" id="rst">清除所有進度</button></div>
+    ${footer()}`;
+  bindCrumb();
+  $("#rst").onclick = () => {
+    if(confirm("確定要把所有進度清空嗎？自訂單字和題目不會被刪除。")){
+      state.progress = {}; save(); toast("進度已清空"); renderProgress();
+    }
+  };
+}
+
+/* ============================================================
+   家長區
+   ============================================================ */
+function renderParent(){
+  const unitOpts = UNITS.map(u => `<option value="${u.n}">Unit ${u.n} · ${esc(u.en)}</option>`).join("");
+  const subjOpts = SUBJECTS.map(s => `<option value="${s.id}"${s.id==="english"?" selected":""}>${esc(s.name)}</option>`).join("");
+  app.innerHTML = `
+    ${crumb([["首頁","home"]], "家長區")}
+    <div class="page-head"><h2>家長出題區</h2>
+      <p>把學校考卷、聯絡簿上的單字和題目加進來，會自動混進 Cindy 的閃卡和測驗裡。${state.db ? "" : "（目前存在這台裝置）"}</p></div>
+
+    <div class="sec" style="margin-top:0"><h3>加單字</h3>
+      <form class="form" id="wf">
+        <div class="two">
+          <div class="field"><label for="ws">科目</label><select id="ws">${subjOpts}</select></div>
+          <div class="field"><label for="wu">單元（English 才需要）</label>
+            <select id="wu"><option value="">不指定</option>${unitOpts}</select></div></div>
+        <div class="two">
+          <div class="field"><label for="we">英文／原文</label><input id="we" class="en" placeholder="例：butterfly" required></div>
+          <div class="field"><label for="wz">中文</label><input id="wz" placeholder="例：蝴蝶" required></div></div>
+        <button class="btn primary" type="submit">加進去</button></form></div>
+
+    <div class="sec"><h3>加題目</h3>
+      <form class="form" id="qf">
+        <div class="two">
+          <div class="field"><label for="qs">科目</label><select id="qs">${subjOpts}</select></div>
+          <div class="field"><label for="qu">單元（English 才需要）</label>
+            <select id="qu"><option value="">不指定</option>${unitOpts}</select></div></div>
+        <div class="field"><label for="qq">題目</label><textarea id="qq" placeholder="例：The cat is ___ the bed." required></textarea></div>
+        <div class="field"><label for="qa">正確答案</label><input id="qa" placeholder="例：under" required></div>
+        <div class="field"><label for="qw">錯誤選項（用逗號分開，兩個以上才會變成選擇題）</label>
+          <input id="qw" placeholder="例：above, between"></div>
+        <div class="field"><label for="qn">說明（答錯時給的提示，可留空）</label><input id="qn" placeholder="例：在下面用 under"></div>
+        <button class="btn primary" type="submit">加進去</button></form></div>
+
+    <div class="sec"><h3>已加的單字（${state.custom.words.length}）</h3>
+      ${state.custom.words.length ? `<div class="kv">${state.custom.words.map(w => `
+        <div class="item"><div class="imain">
+          <div><span class="en" style="font-weight:700">${esc(w.en)}</span> — ${esc(w.zh)}</div>
+          <div class="is">${esc(subjName(w.subject))}${w.unit ? " · Unit " + esc(w.unit) : ""}</div></div>
+        <button class="del" data-dw="${w.id}">刪除</button></div>`).join("")}</div>`
+        : `<div class="note">還沒有自訂單字。</div>`}</div>
+
+    <div class="sec"><h3>已加的題目（${state.custom.questions.length}）</h3>
+      ${state.custom.questions.length ? `<div class="kv">${state.custom.questions.map(q => `
+        <div class="item"><div class="imain"><div>${esc(q.q)}</div>
+          <div class="is">答案：${esc(q.a)}${q.opts && q.opts.length>=2 ? " · 選擇題" : " · 只在清單顯示"} · ${esc(subjName(q.subject))}${q.unit ? " · Unit " + esc(q.unit) : ""}</div></div>
+        <button class="del" data-dq="${q.id}">刪除</button></div>`).join("")}</div>`
+        : `<div class="note">還沒有自訂題目。</div>`}</div>
+    ${footer()}`;
+  bindCrumb();
+  $("#wf").onsubmit = e => {
+    e.preventDefault();
+    const en = $("#we").value.trim(), zh = $("#wz").value.trim();
+    if(!en || !zh) return toast("英文和中文都要填");
+    state.custom.words.push({id:uid(), subject:$("#ws").value, unit:$("#wu").value, en, zh});
+    save(); toast("單字加好了"); renderParent();
+  };
+  $("#qf").onsubmit = e => {
+    e.preventDefault();
+    const q = $("#qq").value.trim(), a = $("#qa").value.trim();
+    if(!q || !a) return toast("題目和答案都要填");
+    const opts = $("#qw").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+    state.custom.questions.push({id:uid(), subject:$("#qs").value, unit:$("#qu").value, q, a, opts, note:$("#qn").value.trim()});
+    save(); toast(opts.length >= 2 ? "選擇題加好了，會出現在測驗裡" : "題目加好了（選項不足兩個，不會進測驗）"); renderParent();
+  };
+  app.querySelectorAll("[data-dw]").forEach(b => b.onclick = () => {
+    state.custom.words = state.custom.words.filter(w => w.id !== b.dataset.dw); save(); renderParent(); });
+  app.querySelectorAll("[data-dq]").forEach(b => b.onclick = () => {
+    state.custom.questions = state.custom.questions.filter(q => q.id !== b.dataset.dq); save(); renderParent(); });
+}
+function subjName(id){ const s = SUBJECTS.find(x => x.id === id); return s ? s.name : id; }
+
+/* ============================================================ */
+document.querySelectorAll("#topnav button").forEach(b => b.onclick = () => go(b.dataset.go));
+loadLocal();
+render();
+initDb();
+</script>
+
+</body>
+</html>
