@@ -97,6 +97,94 @@ body.zy-on .fc .fc-hint,body.zy-on .ptable{font-size:14px}
 body.zy-on .eyebrow,body.zy-on .qkind,body.zy-on .rtag,body.zy-on .chip-soon,
 body.zy-on .pill,body.zy-on .ptable th,body.zy-on .kv-row .kv-k,body.zy-on .footer,
 body.zy-on .tag,body.zy-on .exam-flag{font-size:12.5px}
+/* ---------- 數學：鍵盤與練習卡 ---------- */
+.mm-grid{display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.mm{display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;
+  background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--s-math);
+  border-radius:var(--r-m); padding:14px 16px; min-height:78px}
+.mm:hover{border-color:var(--s-math)}
+.mm b{font-size:16px}
+.mm span{font-size:12.5px; color:var(--ink-3)}
+.mm .sc{font-size:12px; color:var(--s-math); font-weight:700; font-variant-numeric:tabular-nums}
+.ansbox{
+  display:flex; align-items:center; justify-content:center; min-height:64px; margin:6px 0 14px;
+  background:var(--surface-3); border:2px solid var(--line); border-radius:14px;
+  font-size:34px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:.06em;
+}
+.ansbox.empty{color:var(--ink-3); font-size:22px; font-weight:400}
+.ansbox.right{border-color:var(--good); background:var(--good-soft); color:var(--good)}
+.ansbox.wrong{border-color:var(--bad); background:var(--bad-soft); color:var(--bad)}
+.kp{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.kp button{
+  border:1.5px solid var(--line-2); background:var(--surface); border-radius:12px;
+  min-height:56px; font-size:24px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.kp button:active{background:var(--surface-2)}
+.kp button.act{font-size:17px; font-weight:500}
+.kp button.go{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+.ordrow{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+.ordrow button{
+  border:1.5px solid var(--line-2); background:var(--surface); border-radius:12px;
+  padding:14px 18px; font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; min-width:92px;
+}
+.ordrow button:disabled{opacity:.35}
+.ordrow button.picked{background:var(--accent-soft); border-color:var(--accent); color:var(--accent)}
+.bigopts{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+.bigopts button{
+  border:1.5px solid var(--line-2); background:var(--surface-3); border-radius:14px;
+  min-height:72px; font-size:30px; font-weight:700;
+}
+.bigopts button.right{background:var(--good-soft); border-color:var(--good); color:var(--good)}
+.bigopts button.wrong{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+/* ---------- 模擬小考：試卷樣式 ---------- */
+.paper{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:18px 16px 22px}
+.paper-head{display:flex; align-items:flex-start; gap:12px; border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:6px}
+.paper-head .ph-main{flex:1; min-width:0}
+.paper-head h3{margin:0; font-family:var(--font-display); font-size:17px; letter-spacing:.02em}
+.paper-head .ph-sub{font-size:12.5px; color:var(--ink-3); margin-top:2px}
+.score-stamp{
+  flex:none; min-width:64px; height:56px; display:grid; place-items:center; line-height:1;
+  border:2.5px solid var(--bad); border-radius:50%; color:var(--bad);
+  font-family:var(--font-display); font-size:26px; font-weight:900; font-variant-numeric:tabular-nums;
+  transform:rotate(-8deg);
+}
+.sect{margin-top:18px}
+.sect > .sh{font-weight:700; font-size:15.5px; margin-bottom:8px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+.sect > .sh .pts{font-size:12px; color:var(--ink-3); font-weight:500}
+.qitem{display:flex; gap:8px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:16px; line-height:2.2}
+.qitem:last-child{border-bottom:0}
+.qno{flex:none; color:var(--ink-3); font-size:14px; padding-top:2px; min-width:30px}
+.qbody{flex:1; min-width:0}
+.blk{
+  display:inline-block; min-width:62px; margin:0 3px; padding:2px 8px;
+  border:0; border-bottom:2px solid var(--line-2); background:transparent;
+  font-size:18px; font-weight:700; text-align:center; color:var(--accent);
+  font-variant-numeric:tabular-nums; line-height:1.6;
+}
+.blk.empty{color:var(--ink-3); font-weight:400}
+.blk.on{border-bottom-color:var(--accent); background:var(--accent-soft); border-radius:6px 6px 0 0}
+.blk.ok{color:var(--good); border-bottom-color:var(--good)}
+.blk.ng{color:var(--bad); border-bottom-color:var(--bad); text-decoration:line-through}
+.fix{color:var(--bad); font-weight:700; margin-left:4px; font-size:17px}
+.qmark{font-size:20px; font-weight:900; margin-left:6px; color:var(--bad)}
+.pick{display:inline-flex; gap:4px; margin:0 4px; vertical-align:middle}
+.pick button{
+  border:1.5px solid var(--line-2); background:var(--surface-3); border-radius:8px;
+  min-width:44px; min-height:40px; font-size:20px; font-weight:700;
+}
+.pick button.sel{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+.pick button.ok{background:var(--good-soft); border-color:var(--good); color:var(--good)}
+.pick button.ng{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.kpbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  background:var(--surface); border-top:1px solid var(--line-2);
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -6px 20px rgba(22,35,61,.12);
+}
+.kpbar .kpin{max-width:420px; margin:0 auto; display:grid; grid-template-columns:repeat(6,1fr); gap:6px}
+.kpbar button{border:1.5px solid var(--line-2); background:var(--surface); border-radius:10px; min-height:50px; font-size:21px; font-weight:700}
+.kpbar button.act{font-size:14px; font-weight:500}
+.kpbar button.go{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+body.kp-open{padding-bottom:96px}
 .zybtn{
   flex:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
   border-radius:999px; padding:5px 11px; font-size:13px; min-height:40px; font-weight:700;
@@ -497,7 +585,7 @@ const CN_ALL = (function(){ const a=[]; CN.lessons.forEach(l => a.push.apply(a, 
 
 const SUBJECTS = [
   {id:"chinese", name:"國語",    ico:"國", css:"--s-chinese", desc:"二上 12 課 · 每課 20 生詞", ready:true},
-  {id:"math",    name:"數學",    ico:"數", css:"--s-math",    desc:"加減、乘法、單位、應用題", ready:false},
+  {id:"math",    name:"數學",    ico:"數", css:"--s-math",    desc:"二上 · 單元 1 數到 300", ready:true},
   {id:"english", name:"English", ico:"E",  css:"--s-english", desc:"Next Move 2 · 21 週進度", ready:true},
   {id:"science", name:"自然",    ico:"自", css:"--s-science", desc:"觀察、植物、動物、天氣", ready:false},
   {id:"social",  name:"社會",    ico:"社", css:"--s-social",  desc:"我和家人、學校、社區", ready:false},
@@ -740,6 +828,115 @@ const UNITS = [
     ]
   }
 ];
+
+/* ============================================================
+   數學 —— 二上（依課本與習作單元）
+   題目由程式即時生成，每次練習都是新題
+   ============================================================ */
+const MATH = {
+  book:"二上數學",
+  units:[{
+    n:1, title:"數到 300", range:"1-1 認識 300 以內的數 · 1-2 認識百位 · 1-3 兩數的大小比較",
+    goals:["數出 300 以內的數量","知道百位、十位、個位各表示多少","會讀、會寫 300 以內的數","比較兩個數的大小，並由小排到大"],
+    points:[
+      ["十和百","10 個十合起來是 100（一百）。100 往上數：101、102…110…199、200（二百）…一直到 300。"],
+      ["念法","123 念作「一百二十三」；207 念作「二百零七」——十位是 0 要念「零」。"],
+      ["進位","數到「99 再多 1」要進位成 100；「199 再多 1」要進位成 200。"],
+      ["位值","183 的 8 在十位，表示 80。204 是 2 個百、0 個十、4 個一合起來的。"],
+      ["比大小","先比百位；百位一樣就比十位；十位一樣再比個位。280 > 279，156 < 165。"]
+    ],
+    modes:["place","compose","read","seq","compare","order"]
+  }]
+};
+const MATH_MODES = {
+  place:  {name:"位值",      hint:"百位、十位、個位"},
+  compose:{name:"合起來",    hint:"幾個百、幾個十"},
+  read:   {name:"數的念法",  hint:"國字和數字互換"},
+  seq:    {name:"數列接龍",  hint:"照規律填空格"},
+  compare:{name:"比大小",    hint:"填 > 或 <"},
+  order:  {name:"由小排到大", hint:"三個數排順序"}
+};
+
+function cnNum(n){
+  const d = ["零","一","二","三","四","五","六","七","八","九"];
+  const h = Math.floor(n/100), t = Math.floor(n/10)%10, o = n%10;
+  let s = "";
+  if(h) s += d[h] + "百";
+  if(t) s += d[t] + "十";
+  else if(h && o) s += "零";
+  if(o) s += d[o];
+  return s || "零";
+}
+const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const POS = [["百位",100],["十位",10],["個位",1]];
+
+/* 六種題目產生器 —— 回傳 {type, q, ans, opts, why} */
+const MG = {
+  place(){
+    const n = rnd(101, 300);
+    if(Math.random() < 0.5){
+      const p = POS[rnd(0,2)];
+      return {type:"num", q:`<b>${n}</b> 的${p[0]}是多少？`,
+        ans: Math.floor(n/p[1])%10, why:`${n} 的${p[0]}是 ${Math.floor(n/p[1])%10}。`};
+    }
+    const i = rnd(0,2), d = Math.floor(n/POS[i][1])%10;
+    return {type:"num", q:`<b>${n}</b> 的 <b>${d}</b> 在${POS[i][0]}，表示多少？`,
+      ans: d*POS[i][1], why:`${d} 在${POS[i][0]}，所以表示 ${d*POS[i][1]}。`};
+  },
+  compose(){
+    const style = rnd(0,2);
+    if(style === 0){
+      const h = rnd(1,3), t = rnd(0,9);
+      return {type:"num", q:`${h} 個百和 ${t} 個十合起來是多少？`,
+        ans: h*100+t*10, why:`${h} 個百是 ${h*100}，${t} 個十是 ${t*10}，合起來是 ${h*100+t*10}。`};
+    }
+    if(style === 1){
+      const h = rnd(1,2), o = rnd(10,19);
+      return {type:"num", q:`${o} 個一和 ${h} 個百合起來是多少？`,
+        ans: h*100+o, why:`${h} 個百是 ${h*100}，加上 ${o} 個一，是 ${h*100+o}。`};
+    }
+    const t = rnd(10,19), o = rnd(10,19);
+    return {type:"num", q:`${t} 個十和 ${o} 個一合起來是多少？`,
+      ans: t*10+o, why:`${t} 個十是 ${t*10}，加上 ${o}，是 ${t*10+o}。`};
+  },
+  read(){
+    const n = Math.random() < 0.4 ? rnd(1,3)*100 + rnd(1,9) : rnd(101,300);
+    if(Math.random() < 0.5)
+      return {type:"num", q:`「<b>${cnNum(n)}</b>」記作多少？`, ans:n, why:`${cnNum(n)} 記作 ${n}。`};
+    const wrong = new Set([cnNum(n)]);
+    while(wrong.size < 4){ wrong.add(cnNum(rnd(101,300))); }
+    return {type:"choice", q:`<b>${n}</b> 念作？`, opts:Array.from(wrong), ans:cnNum(n),
+      why:`${n} 念作「${cnNum(n)}」。`};
+  },
+  seq(){
+    const steps = [1,-1,10,-10];
+    const st = steps[rnd(0,3)];
+    let start = st > 0 ? rnd(100, 300 - st*5) : rnd(100 + Math.abs(st)*5, 300);
+    const arr = [];
+    for(let i = 0; i < 6; i++) arr.push(start + st*i);
+    const hole = rnd(1,4);
+    const shown = arr.map((v,i) => i === hole ? "□" : v).join("、");
+    return {type:"num", q:`照規律填填看：<br><b>${shown}</b>`, ans:arr[hole],
+      why:`每次${st>0?"多":"少"} ${Math.abs(st)}，所以空格是 ${arr[hole]}。`};
+  },
+  compare(){
+    let a, b;
+    const k = rnd(0,2);
+    if(k === 0){ const h = rnd(1,2)*100; a = h + rnd(0,9)*10 + rnd(0,9); b = h + rnd(0,9)*10 + rnd(0,9); }
+    else if(k === 1){ const x = rnd(1,3), y = rnd(4,9); a = rnd(1,2)*100 + x*10 + y; b = a - x*10 - y + y*10 + x; }
+    else { a = rnd(100,300); b = rnd(100,300); }
+    if(a === b) b = a + 1;
+    return {type:"choice", q:`<b>${a}</b> □ <b>${b}</b>　該填什麼？`, opts:[">","<"], ans: a > b ? ">" : "<",
+      why: a > b ? `${a} 比 ${b} 大，所以填 >。` : `${a} 比 ${b} 小，所以填 <。`};
+  },
+  order(){
+    const s = new Set();
+    while(s.size < 3) s.add(rnd(100,300));
+    const arr = Array.from(s);
+    return {type:"order", q:"把這三個數<b>由小排到大</b>，照順序點出來。", opts:shuffle(arr),
+      ans: arr.slice().sort((x,y)=>x-y), why:`由小到大是 ${arr.slice().sort((x,y)=>x-y).join(" → ")}。`};
+  }
+};
 
 /* ============================================================
    狀態與儲存
@@ -1048,6 +1245,8 @@ function zyWatch(el){
    ============================================================ */
 const app = $("#app");
 function go(view, opts){
+  document.querySelectorAll(".kpbar").forEach(k => k.remove());
+  document.body.classList.remove("kp-open");
   Object.assign(state, {view}, opts || {});
   window.scrollTo({top:0});
   render();
@@ -1056,7 +1255,7 @@ function render(){
   document.querySelectorAll("#topnav button[data-go]").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.go === state.view)));
   ({home:renderHome, subject:renderSubject, unit:renderUnit, week:renderWeek,
-    cnlesson:renderCnLesson, progress:renderProgress, parent:renderParent}[state.view] || renderHome)();
+    cnlesson:renderCnLesson, mathunit:renderMathUnit, progress:renderProgress, parent:renderParent}[state.view] || renderHome)();
   zyApply(app);
 }
 function crumb(links, current){
@@ -1068,6 +1267,7 @@ function bindCrumb(){
     const t = b.dataset.crumb;
     if(t === "english") go("subject", {subject:"english"});
     else if(t === "chinese") go("subject", {subject:"chinese"});
+    else if(t === "math") go("subject", {subject:"math"});
     else go(t);
   });
 }
@@ -1081,7 +1281,7 @@ function ringSvg(pct, color){
 }
 function footer(){
   return `<p class="footer">英語內容依據${esc(TERM.school)}${esc(TERM.term)}二年級單字表（${esc(TERM.book)}）與每週一句整理。
-  Unit 5–9 為下學期範圍，先放著預習。國語生詞取自二上「2 號本」每課 20 個生詞（聽寫小考範圍）。數學、自然、社會、其他待教材上傳後補上。</p>`;
+  Unit 5–9 為下學期範圍，先放著預習。國語生詞取自二上「2 號本」每課 20 個生詞（聽寫小考範圍）。數學為二上單元 1「數到 300」，題目由程式即時生成。自然、社會、其他待教材上傳後補上。</p>`;
 }
 function wordCard(w){
   return `<div class="word">
@@ -1103,6 +1303,10 @@ function renderHome(){
     const mine = state.custom.words.filter(x => x.subject === sub.id).length
                + state.custom.questions.filter(x => x.subject === sub.id).length;
     let desc = sub.ready ? sub.desc : (mine ? `媽媽加了 ${mine} 筆自訂內容` : sub.desc);
+    if(sub.id === "math"){
+      const sc = mScore(1);
+      desc = `單元 1 數到 300 · ${sc ? "已得 " + sc + " 顆星" : "六種題型自動出題"}`;
+    }
     if(sub.id === "chinese"){
       const done = CN.lessons.filter(l => cnScore(l.n) === 4).length;
       desc = `二上 12 課 · ${done ? `已完成 ${done} 課` : "每課 20 個生詞"}`;
@@ -1161,6 +1365,7 @@ function renderSubject(){
   const s = SUBJECTS.find(x => x.id === state.subject);
   if(!s) return go("home");
   if(s.id === "chinese") return renderChinese(s);
+  if(s.id === "math") return renderMath(s);
   if(s.id !== "english") return renderOtherSubject(s);
 
   const tabs = [["week","每週單字"],["sentence","每週一句"],["unit","課本單元"]];
@@ -1805,6 +2010,438 @@ function buildCnQuiz(words, count){
 }
 
 /* ============================================================
+   數學：單元頁 / 練習場 / 綜合測驗
+   ============================================================ */
+function mScore(n){
+  const p = pget("mt"+n), m = p.modes || {};
+  let d = 0;
+  if(p.ref) d++;
+  if(Object.keys(m).filter(k => m[k] >= 60).length >= 4) d++;
+  if((p.quiz||0) >= 60) d++;
+  if((p.quiz||0) >= 90) d++;
+  return d;
+}
+
+function renderMath(s){
+  const rows = MATH.units.map(u => {
+    const sc = mScore(u.n);
+    return `<button class="row ${sc===4?"done":""}" data-mu="${u.n}">
+      <span class="rnum">${u.n}</span>
+      <span class="rmain">
+        <span class="rt">${esc(u.title)}</span>
+        <span class="rs">${esc(u.range)}</span>
+        <span class="bar"><i style="width:${sc/4*100}%"></i></span>
+      </span>
+      <span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></button>`;
+  }).join("");
+  app.innerHTML = `
+    ${crumb([["首頁","home"]], "數學")}
+    <div class="page-head">
+      <p class="eyebrow" style="margin-bottom:6px">${esc(MATH.book)}</p>
+      <h2>數學</h2>
+      <p>題目每次都重新出，練幾次都不會重複。先看重點，再到練習場一種一種練。</p>
+    </div>
+    <div class="rows">${rows}</div>
+    <div class="note" style="margin-top:20px">後面的單元（加減、乘法、時間、長度…）把課本或習作拍照傳上來就會補進去。</div>
+    ${footer()}`;
+  bindCrumb();
+  app.querySelectorAll("[data-mu]").forEach(b =>
+    b.onclick = () => go("mathunit", {munit:Number(b.dataset.mu), tab:"ref"}));
+}
+
+function renderMathUnit(){
+  const u = MATH.units.find(x => x.n === state.munit);
+  if(!u) return go("subject", {subject:"math"});
+  const p = pget("mt"+u.n);
+  const tabs = [["ref","重點速查"],["drill","練習場"],["quiz","模擬小考"]];
+  app.innerHTML = `
+    ${crumb([["首頁","home"],["數學","math"]], "單元 " + u.n)}
+    <div class="page-head">
+      <p class="eyebrow" style="margin-bottom:6px">單元 ${u.n}</p>
+      <h2>${esc(u.title)}</h2>
+      <p>${esc(u.range)}</p>
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(t =>
+      `<button role="tab" data-tab="${t[0]}" aria-selected="${state.tab===t[0]}">${t[1]}</button>`).join("")}</div>
+    <div id="panel"></div>
+    ${footer()}`;
+  bindCrumb();
+  app.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => {
+    document.querySelectorAll(".kpbar").forEach(k => k.remove());
+    document.body.classList.remove("kp-open");
+    state.tab = b.dataset.tab; state.mmode = null; renderMathUnit();
+  });
+  const panel = $("#panel");
+
+  if(state.tab === "ref"){
+    panel.innerHTML = `
+      <div class="sec" style="margin-top:0"><h3>學習目標</h3>
+        <ul class="goal-list">${u.goals.map(g => `<li>${esc(g)}</li>`).join("")}</ul></div>
+      <div class="sec"><h3>重點</h3><div class="kv">${u.points.map(pt =>
+        `<div class="kv-row"><div class="kv-k">${esc(pt[0])}</div><div class="kv-v">${esc(pt[1])}</div></div>`).join("")}</div></div>
+      <div class="sec"><button class="btn ${p.ref?"":"primary"}" id="mk">${p.ref ? "✓ 已讀過（點一下取消）" : "我讀完重點了"}</button></div>`;
+    $("#mk").onclick = () => { pset("mt"+u.n, {ref:!p.ref}); renderMathUnit(); };
+    return;
+  }
+
+  if(state.tab === "quiz"){
+    renderPaper(panel, u, sc => pset("mt"+u.n, {quiz:Math.max(p.quiz||0, sc)}));
+    return;
+  }
+
+  /* 練習場 */
+  if(!state.mmode){
+    const m = p.modes || {};
+    panel.innerHTML = `<p class="muted" style="margin:0 0 12px">選一種題型，每次 10 題。</p>
+      <div class="mm-grid">${u.modes.map(k =>
+        `<button class="mm" data-mode="${k}">
+           <b>${esc(MATH_MODES[k].name)}</b>
+           <span>${esc(MATH_MODES[k].hint)}</span>
+           ${m[k] != null ? `<span class="sc">最佳 ${m[k]} 分</span>` : ""}
+         </button>`).join("")}</div>`;
+    panel.querySelectorAll("[data-mode]").forEach(b =>
+      b.onclick = () => { state.mmode = b.dataset.mode; renderMathUnit(); });
+    return;
+  }
+  const mode = state.mmode;
+  runMathDrill(panel, () => MG[mode](), 10, MATH_MODES[mode].name, sc => {
+    const m = Object.assign({}, pget("mt"+u.n).modes);
+    m[mode] = Math.max(m[mode]||0, sc);
+    pset("mt"+u.n, {modes:m});
+  }, () => { state.mmode = null; renderMathUnit(); });
+}
+
+/* 數學練習引擎：數字鍵盤 / 大按鈕選擇 / 排順序 */
+function runMathDrill(panel, gen, total, label, onDone, onBack){
+  let i = 0, right = 0;
+  panel.innerHTML = `<div class="quiz">
+    <div class="qprog"><span class="bar"><i id="mbar" style="width:0%"></i></span><span id="mnum"></span></div>
+    <div class="qcard" id="mcard"></div></div>`;
+  const bar = $("#mbar"), num = $("#mnum"), card = $("#mcard");
+
+  function shell(q, inner){
+    card.innerHTML = `<div class="qkind">${esc(label)}</div>
+      <p class="qtext">${q.q}</p>${inner}
+      <div class="feedback" id="fb"></div>
+      <div class="btn-row" style="margin-top:14px; display:none" id="nr">
+        <button class="btn primary wide" id="nb">${i === total-1 ? "看成績" : "下一題"}</button></div>`;
+    $("#nb").onclick = () => { i++; if(i < total) draw(); else finish(); };
+  }
+  function settle(ok, q){
+    if(ok) right++;
+    const fb = $("#fb");
+    fb.className = "feedback show " + (ok ? "ok" : "no");
+    fb.textContent = (ok ? "答對了！" : "再看一次：") + (q.why || "");
+    $("#nr").style.display = "flex";
+  }
+
+  function draw(){
+    const q = gen();
+    bar.style.width = (i / total * 100) + "%";
+    num.textContent = (i+1) + "/" + total;
+
+    if(q.type === "num"){
+      shell(q, `<div class="ansbox empty" id="disp">點數字輸入答案</div>
+        <div class="kp">
+          ${[1,2,3,4,5,6,7,8,9].map(d => `<button data-d="${d}">${d}</button>`).join("")}
+          <button class="act" data-act="del">刪除</button>
+          <button data-d="0">0</button>
+          <button class="go" data-act="ok">確定</button>
+        </div>`);
+      let val = "";
+      const disp = $("#disp");
+      const paint = () => {
+        disp.textContent = val || "點數字輸入答案";
+        disp.classList.toggle("empty", !val);
+      };
+      card.querySelectorAll("[data-d]").forEach(b => b.onclick = () => {
+        if(val.length < 4){ val += b.dataset.d; paint(); }
+      });
+      card.querySelector('[data-act="del"]').onclick = () => { val = val.slice(0,-1); paint(); };
+      card.querySelector('[data-act="ok"]').onclick = () => {
+        if(!val) return toast("先輸入答案");
+        const ok = Number(val) === q.ans;
+        disp.textContent = ok ? val : val + "　→　" + q.ans;
+        disp.className = "ansbox " + (ok ? "right" : "wrong");
+        card.querySelectorAll(".kp button").forEach(b => b.disabled = true);
+        settle(ok, q);
+      };
+      return;
+    }
+
+    if(q.type === "choice"){
+      const opts = shuffle(q.opts);
+      const big = opts.length <= 2 || opts.every(o => String(o).length <= 2);
+      shell(q, big
+        ? `<div class="bigopts">${opts.map((o,k) => `<button data-i="${k}">${esc(o)}</button>`).join("")}</div>`
+        : `<div class="opts">${opts.map((o,k) => `<button class="opt" data-i="${k}">${esc(o)}</button>`).join("")}</div>`);
+      card.querySelectorAll("[data-i]").forEach((b,k) => b.onclick = () => {
+        card.querySelectorAll("[data-i]").forEach((x,j) => {
+          x.disabled = true;
+          if(opts[j] === q.ans) x.classList.add("right");
+          else if(j === k) x.classList.add("wrong");
+        });
+        settle(opts[k] === q.ans, q);
+      });
+      return;
+    }
+
+    /* order */
+    shell(q, `<div class="ansbox empty" id="disp">照順序點出來</div>
+      <div class="ordrow" id="ord">${q.opts.map((v,k) => `<button data-i="${k}">${v}</button>`).join("")}</div>`);
+    const picked = [], disp = $("#disp");
+    card.querySelectorAll("#ord button").forEach(b => b.onclick = () => {
+      if(b.disabled) return;
+      const v = Number(b.textContent);
+      if(v !== q.ans[picked.length]){
+        b.classList.add("wrong");
+        card.querySelectorAll("#ord button").forEach(x => x.disabled = true);
+        disp.textContent = q.ans.join(" → ");
+        disp.className = "ansbox wrong";
+        settle(false, q);
+        return;
+      }
+      picked.push(v); b.disabled = true; b.classList.add("picked");
+      disp.textContent = picked.join(" → ");
+      disp.classList.remove("empty");
+      if(picked.length === q.ans.length){ disp.className = "ansbox right"; settle(true, q); }
+    });
+  }
+
+  function finish(){
+    const score = Math.round(right / total * 100);
+    bar.style.width = "100%"; num.textContent = total + "/" + total;
+    const msg = score === 100 ? "全部答對，太厲害了！"
+      : score >= 80 ? "很棒！只差一點點就滿分。"
+      : score >= 60 ? "有進步，再練一次會更好。" : "先回去看重點，再來練一次。";
+    card.innerHTML = `<div class="result"><div class="qkind">${esc(label)}</div>
+      <div class="big">${score}<span style="font-size:22px">分</span></div>
+      <p class="msg">答對 ${right} / ${total} 題。${msg}</p>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn primary" id="ag">再練一次</button>
+        <button class="btn" id="bk">回上一頁</button></div></div>`;
+    onDone(score);
+    $("#ag").onclick = () => { i = 0; right = 0; draw(); };
+    $("#bk").onclick = onBack;
+  }
+  draw();
+}
+
+/* ============================================================
+   模擬小考：照學校考卷的格式（大題、配分、括號填空、紅筆批改）
+   ============================================================ */
+function makePaper(){
+  const S = [];
+  /* 一、填填看 —— 每格 3 分 */
+  const n1 = rnd(101,299), n2 = rnd(101,299), n3 = rnd(1,3)*100 + rnd(1,9);
+  const ph = rnd(1,3), pt = rnd(1,9);
+  S.push({label:"一", title:"填填看", pts:"每格 3 分，共 24 分", per:3, items:[
+    {q:`<b>${n1}</b> 的百位數字是 {0}，十位數字是 {1}，個位數字是 {2}。`,
+     ans:[Math.floor(n1/100), Math.floor(n1/10)%10, n1%10]},
+    {q:`<b>${n2}</b> 是 {0} 個百、{1} 個十、{2} 個一合起來的。`,
+     ans:[Math.floor(n2/100), Math.floor(n2/10)%10, n2%10]},
+    {q:`「<b>${cnNum(n3)}</b>」記作 {0}。`, ans:[n3]},
+    {q:`${ph} 個百和 ${pt} 個十合起來是 {0}。`, ans:[ph*100+pt*10]}
+  ]});
+
+  /* 二、填入適當的數 —— 每格 4 分 */
+  const seqItem = () => {
+    const steps = [1,-1,10,-10];
+    const st = steps[rnd(0,3)];
+    const start = st > 0 ? rnd(100, 300 - st*5) : rnd(100 + Math.abs(st)*5, 300);
+    const arr = []; for(let i=0;i<6;i++) arr.push(start + st*i);
+    let h1 = rnd(1,4), h2 = rnd(1,4);
+    while(h2 === h1) h2 = rnd(1,4);
+    const holes = [h1,h2].sort((a,b)=>a-b);
+    let k = 0;
+    const txt = arr.map((v,i) => holes.indexOf(i) >= 0 ? "{" + (k++) + "}" : "<b>"+v+"</b>").join(" → ");
+    return {q:txt, ans:holes.map(i => arr[i])};
+  };
+  S.push({label:"二", title:"填入適當的數", pts:"每格 4 分，共 24 分", per:4,
+    items:[seqItem(), seqItem(), seqItem()]});
+
+  /* 三、在 □ 中填入 > 或 < —— 每題 3 分 */
+  const cmp = [];
+  for(let i=0;i<6;i++){
+    let a, b;
+    if(i < 3){ const h = rnd(1,2)*100; a = h + rnd(0,9)*10 + rnd(0,9); b = h + rnd(0,9)*10 + rnd(0,9); }
+    else { const x = rnd(1,3), y = rnd(4,9), h = rnd(1,2)*100; a = h + x*10 + y; b = h + y*10 + x; }
+    if(a === b) b = a + 1;
+    cmp.push({q:`<b>${a}</b> {0} <b>${b}</b>`, ans:[a > b ? ">" : "<"], kind:"pick", opts:[">","<"]});
+  }
+  S.push({label:"三", title:"在 □ 中填入 > 或 <", pts:"每題 3 分，共 18 分", per:3, items:cmp});
+
+  /* 四、由小排到大 —— 每題 5 分（三格全對才給分） */
+  const ordItem = () => {
+    const s = new Set(); while(s.size < 3) s.add(rnd(100,300));
+    const arr = Array.from(s), sorted = arr.slice().sort((x,y)=>x-y);
+    return {q:`<b>${arr.join("、")}</b>　→　{0} → {1} → {2}`, ans:sorted, group:true};
+  };
+  S.push({label:"四", title:"把三個數由小排到大", pts:"每題 5 分，共 10 分", per:5,
+    items:[ordItem(), ordItem()]});
+
+  /* 五、動動腦 —— 每格 4 分 */
+  const b1 = rnd(11,30)*10, f1 = rnd(210,300), m1 = rnd(100,298);
+  S.push({label:"五", title:"動動腦", pts:"每格 4 分，共 24 分", per:4, items:[
+    {q:`有 <b>${b1}</b> 個包子，賣掉 10 個，剩下 {0} 個；再賣掉 10 個，剩下 {1} 個。`,
+     ans:[b1-10, b1-20]},
+    {q:`有 <b>${f1}</b> 個花片，拿走 1 個，剩下 {0} 個；再拿走 1 個，剩下 {1} 個。`,
+     ans:[f1-1, f1-2]},
+    {q:`<b>${m1}</b> 再多 1 是 {0}；<b>${m1+1}</b> 再少 1 是 {1}。`, ans:[m1+1, m1]}
+  ]});
+  return S;
+}
+
+function paperTotal(S){
+  return S.reduce((t,s) => t + s.items.reduce((a,it) =>
+    a + (it.group ? s.per : it.ans.length * s.per), 0), 0);
+}
+
+function renderPaper(panel, u, onDone){
+  const S = makePaper();
+  const vals = {};                       /* id -> 作答 */
+  let graded = false, active = null;
+  const total = paperTotal(S);
+  panel.__paper = S;
+
+  const bodyHtml = S.map((sec, si) => `
+    <div class="sect">
+      <div class="sh"><span>${sec.label}、${esc(sec.title)}</span><span class="pts">（${esc(sec.pts)}）</span></div>
+      ${sec.items.map((it, ii) => {
+        let html = it.q;
+        it.ans.forEach((a, bi) => {
+          const id = `b_${si}_${ii}_${bi}`;
+          const slot = it.kind === "pick"
+            ? `<span class="pick" data-pick="${id}">${it.opts.map(o =>
+                `<button data-v="${esc(o)}">${esc(o)}</button>`).join("")}</span>`
+            : `<button class="blk empty" data-blk="${id}">（　）</button>`;
+          html = html.replace("{" + bi + "}", slot);
+        });
+        return `<div class="qitem" id="it_${si}_${ii}">
+          <span class="qno">(${ii+1})</span><span class="qbody">${html}</span></div>`;
+      }).join("")}
+    </div>`).join("");
+
+  panel.innerHTML = `
+    <div class="paper" id="paper">
+      <div class="paper-head">
+        <div class="ph-main">
+          <h3>數學　單元 ${u.n}　${esc(u.title)}　隨堂小考</h3>
+          <div class="ph-sub">姓名：Cindy　　滿分 ${total} 分　　題目每次不一樣</div>
+        </div>
+        <div class="score-stamp" id="stamp" hidden></div>
+      </div>
+      ${bodyHtml}
+    </div>
+    <div class="btn-row" style="margin-top:18px">
+      <button class="btn primary wide" id="submit">交卷</button>
+    </div>`;
+
+  const kpbar = document.createElement("div");
+  kpbar.className = "kpbar"; kpbar.hidden = true;
+  kpbar.innerHTML = `<div class="kpin">
+    ${[1,2,3,4,5,6,7,8,9,0].map(d => `<button data-d="${d}">${d}</button>`).join("")}
+    <button class="act" data-act="del">刪除</button>
+    <button class="act go" data-act="done">完成</button></div>`;
+  document.body.appendChild(kpbar);
+
+  function closeKp(){
+    kpbar.hidden = true;
+    document.body.classList.remove("kp-open");
+    if(active){ active.classList.remove("on"); active = null; }
+  }
+  function openKp(btn){
+    if(graded) return;
+    if(active) active.classList.remove("on");
+    active = btn; btn.classList.add("on");
+    kpbar.hidden = false;
+    document.body.classList.add("kp-open");
+    btn.scrollIntoView({block:"center", behavior:"smooth"});
+  }
+  function paint(btn){
+    const v = vals[btn.dataset.blk];
+    btn.textContent = v ? v : "（　）";
+    btn.classList.toggle("empty", !v);
+  }
+  panel.querySelectorAll("[data-blk]").forEach(b => b.onclick = () => openKp(b));
+  kpbar.querySelectorAll("[data-d]").forEach(b => b.onclick = () => {
+    if(!active) return;
+    const id = active.dataset.blk;
+    vals[id] = ((vals[id] || "") + b.dataset.d).slice(0,4);
+    paint(active);
+  });
+  kpbar.querySelector('[data-act="del"]').onclick = () => {
+    if(!active) return;
+    const id = active.dataset.blk;
+    vals[id] = (vals[id] || "").slice(0,-1);
+    paint(active);
+  };
+  kpbar.querySelector('[data-act="done"]').onclick = closeKp;
+  panel.querySelectorAll("[data-pick]").forEach(g => {
+    g.querySelectorAll("button").forEach(b => b.onclick = () => {
+      if(graded) return;
+      closeKp();
+      g.querySelectorAll("button").forEach(x => x.classList.remove("sel"));
+      b.classList.add("sel");
+      vals[g.dataset.pick] = b.dataset.v;
+    });
+  });
+
+  $("#submit").onclick = () => {
+    if(graded) return;
+    const left = [];
+    S.forEach((sec,si) => sec.items.forEach((it,ii) => it.ans.forEach((a,bi) => {
+      if(vals[`b_${si}_${ii}_${bi}`] == null || vals[`b_${si}_${ii}_${bi}`] === "")
+        left.push(1);
+    })));
+    if(left.length && !confirm(`還有 ${left.length} 格沒寫，確定要交卷嗎？`)) return;
+
+    graded = true; closeKp();
+    let got = 0;
+    S.forEach((sec,si) => sec.items.forEach((it,ii) => {
+      let allOk = true;
+      it.ans.forEach((a,bi) => {
+        const id = `b_${si}_${ii}_${bi}`;
+        const raw = vals[id];
+        const ok = it.kind === "pick" ? raw === a : Number(raw) === Number(a);
+        if(!ok) allOk = false;
+        if(it.kind === "pick"){
+          const g = panel.querySelector(`[data-pick="${id}"]`);
+          g.querySelectorAll("button").forEach(b => {
+            b.disabled = true;
+            if(b.dataset.v === a) b.classList.add("ok");
+            else if(b.classList.contains("sel")) b.classList.add("ng");
+          });
+        }else{
+          const b = panel.querySelector(`[data-blk="${id}"]`);
+          b.disabled = true;
+          b.textContent = raw || "（　）";
+          b.className = "blk " + (ok ? "ok" : "ng");
+          if(!ok) b.insertAdjacentHTML("afterend", `<span class="fix">${a}</span>`);
+        }
+        if(!it.group && ok) got += sec.per;
+      });
+      if(it.group && allOk) got += sec.per;
+      const row = $("#it_"+si+"_"+ii);
+      row.querySelector(".qbody").insertAdjacentHTML("beforeend",
+        `<span class="qmark">${allOk ? "✓" : "✗"}</span>`);
+    }));
+
+    const score = Math.round(got / total * 100);
+    const stamp = $("#stamp");
+    stamp.hidden = false; stamp.textContent = score;
+    $("#paper").scrollIntoView({block:"start", behavior:"smooth"});
+    $("#submit").outerHTML = `<div class="btn-row">
+      <button class="btn primary" id="again" style="flex:1">再考一次（新題目）</button>
+      <button class="btn" id="back" style="flex:1">回上一頁</button></div>`;
+    onDone(score);
+    toast(`得 ${score} 分`);
+    $("#again").onclick = () => { kpbar.remove(); renderPaper(panel, u, onDone); };
+    $("#back").onclick = () => { kpbar.remove(); state.tab = "drill"; renderMathUnit(); };
+  };
+}
+
+/* ============================================================
    進度頁
    ============================================================ */
 function renderProgress(){
@@ -1842,6 +2479,18 @@ function renderProgress(){
       <td class="num"><span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></td></tr>`;
   }).join("");
 
+  const mrows = MATH.units.map(u => {
+    const p = pget("mt"+u.n), m = p.modes || {}, sc = mScore(u.n);
+    const okModes = u.modes.filter(k => (m[k]||0) >= 60).length;
+    return `<tr>
+      <td><strong>${u.n}</strong> ${esc(u.title)}</td>
+      <td>${p.ref ? `<span class="pill ok">已讀</span>` : `<span class="pill no">未讀</span>`}</td>
+      <td><span class="pill ${okModes>=4?"ok":okModes?"mid":"no"}">${okModes} / ${u.modes.length}</span></td>
+      <td>${p.quiz == null ? `<span class="pill no">未考</span>`
+        : `<span class="pill ${p.quiz>=80?"ok":p.quiz>=60?"mid":"no"}">${p.quiz}</span>`}</td>
+      <td class="num"><span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></td></tr>`;
+  }).join("");
+
   app.innerHTML = `
     ${crumb([["首頁","home"]], "進度")}
     <div class="page-head"><h2>複習進度</h2>
@@ -1865,6 +2514,9 @@ function renderProgress(){
     <div class="sec"><h3>國語 生詞（二上）</h3><div class="scroll-x"><table class="ptable">
       <thead><tr><th>課次</th><th>念熟</th><th>閃卡</th><th>聽寫</th><th>測驗</th><th style="text-align:right">星星</th></tr></thead>
       <tbody>${crows}</tbody></table></div></div>
+    <div class="sec"><h3>數學</h3><div class="scroll-x"><table class="ptable">
+      <thead><tr><th>單元</th><th>重點</th><th>練過的題型</th><th>模擬小考</th><th style="text-align:right">星星</th></tr></thead>
+      <tbody>${mrows}</tbody></table></div></div>
     <div class="sec"><h3>跨裝置同步</h3>
       <div class="note" style="margin-bottom:10px">
         <strong>目前狀態：</strong>${esc(syncLabel())}
