@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap">
 
 <style>
 :root{
@@ -27,9 +28,12 @@
   --font-zh:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
   --font-display:"Noto Serif TC",Georgia,"Songti TC",serif;
   --font-en:"Andika","Noto Sans TC",Verdana,system-ui,sans-serif;
+  --font-kai:"LXGW WenKai TC","BiauKai","DFKai-SB","標楷體","Kaiti TC","STKaiti","Noto Serif TC",serif;
+  --grid:#5FA585;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
+    --grid:#3F7C60;
     --paper:#101725; --surface:#1A2436; --surface-2:#232F46; --surface-3:#151E2E;
     --ink:#E9EFF9; --ink-2:#A9B7CD; --ink-3:#7B8AA3;
     --line:#2D3A54; --line-2:#3B4A68;
@@ -44,6 +48,7 @@
   }
 }
 :root[data-theme="dark"]{
+  --grid:#3F7C60;
   --paper:#101725; --surface:#1A2436; --surface-2:#232F46; --surface-3:#151E2E;
   --ink:#E9EFF9; --ink-2:#A9B7CD; --ink-3:#7B8AA3;
   --line:#2D3A54; --line-2:#3B4A68;
@@ -58,6 +63,7 @@
 }
 
 *{box-sizing:border-box}
+[hidden]{display:none !important}   /* 獨立 HTML（GitHub 版）也要讓 hidden 生效 */
 body{
   margin:0; background:var(--paper); color:var(--ink);
   font-family:var(--font-zh); font-size:16px; line-height:1.65;
@@ -185,6 +191,34 @@ body.zy-on .tag,body.zy-on .exam-flag{font-size:12.5px}
 .kpbar button.act{font-size:14px; font-weight:500}
 .kpbar button.go{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
 body.kp-open{padding-bottom:96px}
+/* ---------- 國語：生字卡（田字格） ---------- */
+.kai{font-family:var(--font-kai)}
+.zi-grid{display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.zi{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m);
+  padding:14px 12px 10px; display:flex; flex-direction:column; gap:8px}
+.zi.hard{border-color:var(--bad); box-shadow:inset 0 0 0 1px var(--bad)}
+.zrow{display:flex; justify-content:center; align-items:center; gap:2px}
+.zbox{position:relative; width:84px; height:84px; flex:none; border:1.5px solid var(--grid); display:grid; place-items:center}
+.zbox::before{content:""; position:absolute; left:50%; top:0; bottom:0; border-left:1px dashed var(--grid); opacity:.7}
+.zbox::after{content:""; position:absolute; top:50%; left:0; right:0; border-top:1px dashed var(--grid); opacity:.7}
+.zbox .zc{position:relative; z-index:1; font-family:var(--font-kai); font-size:62px; line-height:1; color:var(--ink)}
+.zzy{font-size:46px; display:flex; align-items:center; align-self:stretch}
+.zzy .zy-r{color:var(--ink-2); margin:0}
+.zmeta{display:grid; grid-template-columns:auto 1fr; gap:4px 10px; margin:0; font-size:14px; align-items:baseline}
+.zmeta dt{color:var(--ink-3); font-size:12.5px}
+.zmeta dd{margin:0; font-weight:700}
+.zmeta .zbu{font-family:var(--font-kai); font-size:20px; font-weight:400}
+.zfoot{display:flex; align-items:center; gap:6px; justify-content:space-between; border-top:1px dashed var(--line); padding-top:6px}
+.zfoot .zw{font-size:13px; color:var(--ink-2)}
+.hardtag{position:absolute; top:8px; right:8px; font-size:11px; font-weight:700; color:var(--bad); background:var(--bad-soft); border-radius:999px; padding:1px 8px}
+.word.hard{border-color:var(--bad)}
+.zwarn{margin:0; font-size:12.5px; line-height:1.5; color:var(--bad)}
+.word .wtag{flex:none; font-size:11px; font-weight:700; color:var(--bad); background:var(--bad-soft); border-radius:999px; padding:1px 7px}
+.zi-actions{display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px}
+.reveal-zi{display:flex; flex-direction:column; align-items:center; gap:8px; margin:6px 0 16px}
+.reveal-zi .zbox{width:110px; height:110px}
+.reveal-zi .zbox .zc{font-size:84px}
+.reveal-zi .zzy{font-size:60px}
 .zybtn{
   flex:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
   border-radius:999px; padding:5px 11px; font-size:13px; min-height:40px; font-weight:700;
@@ -577,6 +611,36 @@ const CN = {
   ]
 };
 const CN_ALL = (function(){ const a=[]; CN.lessons.forEach(l => a.push.apply(a, l.words)); return a; })();
+
+/* ============================================================
+   國語生字表 —— 依 Cindy 作業簿抄寫的生字、部首、筆畫
+   筆畫為台灣教育部標準（芝 8、遊 13、飯 12、餅 14，與大陸算法不同）
+   欄位：[生字, 注音, 部首, 部首注音, 總筆畫]
+   hard：老師訂正過的字　warn：作業簿抄錯、要特別記的筆畫　ex：生詞表裡沒有的字，舉例用的詞
+   ============================================================ */
+const CN_EXTRA = {
+  4:{title:"一天的時間",
+     zi:[["塊","ㄎㄨㄞˋ","土","ㄊㄨˇ",13],["圓","ㄩㄢˊ","囗","ㄨㄟˊ",13],["形","ㄒㄧㄥˊ","彡","ㄕㄢ",7],
+         ["芝","ㄓ","艸","ㄘㄠˇ",8],["麻","ㄇㄚˊ","麻","ㄇㄚˊ",11],["餅","ㄅㄧㄥˇ","食","ㄕˊ",14],
+         ["咬","ㄧㄠˇ","口","ㄎㄡˇ",9],["飯","ㄈㄢˋ","食","ㄕˊ",12],["做","ㄗㄨㄛˋ","人","ㄖㄣˊ",11],
+         ["課","ㄎㄜˋ","言","ㄧㄢˊ",15],["洗","ㄒㄧˇ","水","ㄕㄨㄟˇ",9],["澡","ㄗㄠˇ","水","ㄕㄨㄟˇ",16],
+         ["拾","ㄕˊ","手","ㄕㄡˇ",9],["整","ㄓㄥˇ","攴","ㄆㄨ",16],["包","ㄅㄠ","勹","ㄅㄠ",5],
+         ["遊","ㄧㄡˊ","辵","ㄔㄨㄛˋ",13],["戲","ㄒㄧˋ","戈","ㄍㄜ",17],["剩","ㄕㄥˋ","刀","ㄉㄠ",12]],
+     hard:{"餅":"作業簿上老師用紅筆訂正過"}},
+  5:{title:"小書蟲",
+     zi:[["蟲","ㄔㄨㄥˊ","虫","ㄏㄨㄟˇ",18],["森","ㄙㄣ","木","ㄇㄨˋ",12],["動","ㄉㄨㄥˋ","力","ㄌㄧˋ",11],
+         ["物","ㄨˋ","牛","ㄋㄧㄡˊ",8],["王","ㄨㄤˊ","玉","ㄩˋ",4],["坐","ㄗㄨㄛˋ","土","ㄊㄨˇ",7],
+         ["午","ㄨˇ","十","ㄕˊ",4],["停","ㄊㄧㄥˊ","人","ㄖㄣˊ",11],["座","ㄗㄨㄛˋ","广","ㄧㄢˇ",10],
+         ["急","ㄐㄧˊ","心","ㄒㄧㄣ",9],["百","ㄅㄞˇ","白","ㄅㄞˊ",6],["科","ㄎㄜ","禾","ㄏㄜˊ",9],
+         ["全","ㄑㄩㄢˊ","入","ㄖㄨˋ",6],["原","ㄩㄢˊ","厂","ㄏㄢˇ",10],["從","ㄘㄨㄥˊ","彳","ㄔˋ",11],
+         ["此","ㄘˇ","止","ㄓˇ",6],["管","ㄍㄨㄢˇ","竹","ㄓㄨˊ",14],["種","ㄓㄨㄥˇ","禾","ㄏㄜˊ",14]],
+     warn:{"全":"作業簿上寫成 8 畫，正確是 6 畫（上面「入」2 畫＋下面「王」4 畫）"},
+     ex:{"種":"種類"}}
+};
+CN.lessons.forEach(l => Object.assign(l, CN_EXTRA[l.n] || {}));
+const ALL_ZI = (function(){ const a=[]; CN.lessons.forEach(l => (l.zi||[]).forEach(z => a.push(z))); return a; })();
+const BU_POOL = Array.from(new Set(ALL_ZI.map(z => z[2]).concat(
+  ["木","火","日","月","心","女","子","糸","竹","目","足","金","雨","衣","米","耳","力","又","大","山","田","石","貝","支","口"])));
 
 /* ============================================================
    課本單元（Next Move 2 · Scope and Sequence）
@@ -1147,6 +1211,7 @@ const ZYC = (function(){
   for(const r in ZY.i){ const s = ZY.i[r]; for(let k = 0; k < s.length; k++) m[s.charAt(k)] = r; }
   return m;
 })();
+ALL_ZI.forEach(z => { ZYC[z[2]] = z[3]; });   /* 虫ㄏㄨㄟˇ、广ㄧㄢˇ、厂ㄏㄢˇ：台灣部首念法 */
 
 let zyOn = true;
 try{ zyOn = localStorage.getItem("cindy-zhuyin") !== "off"; }catch(e){}
@@ -1281,7 +1346,7 @@ function ringSvg(pct, color){
 }
 function footer(){
   return `<p class="footer">英語內容依據${esc(TERM.school)}${esc(TERM.term)}二年級單字表（${esc(TERM.book)}）與每週一句整理。
-  Unit 5–9 為下學期範圍，先放著預習。國語生詞取自二上「2 號本」每課 20 個生詞（聽寫小考範圍）。數學為二上單元 1「數到 300」，題目由程式即時生成。自然、社會、其他待教材上傳後補上。</p>`;
+  Unit 5–9 為下學期範圍，先放著預習。國語生詞取自二上「2 號本」每課 20 個生詞（聽寫小考範圍）；生字的部首、筆畫照作業簿抄寫，筆畫為台灣教育部算法。數學為二上單元 1「數到 300」，題目由程式即時生成。自然、社會、其他待教材上傳後補上。</p>`;
 }
 function wordCard(w){
   return `<div class="word">
@@ -1833,8 +1898,8 @@ function renderChinese(s){
     return `<button class="row ${sc===4?"done":""}" data-cn="${l.n}">
       <span class="rnum">${l.n}</span>
       <span class="rmain">
-        <span class="rt">第 ${l.n} 課</span>
-        <span class="rs">${l.words.length} 個生詞</span>
+        <span class="rt">第 ${l.n} 課${l.title ? "　" + esc(l.title) : ""}</span>
+        <span class="rs">${l.words.length} 個生詞${l.zi ? " · " + l.zi.length + " 個生字" : ""}</span>
         <span class="rw" style="font-family:var(--font-zh)">${esc(l.words.slice(0,6).join("、"))}…</span>
       </span>
       <span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></button>`;
@@ -1856,7 +1921,7 @@ function renderChinese(s){
     ${footer()}`;
   bindCrumb();
   app.querySelectorAll("[data-cn]").forEach(b =>
-    b.onclick = () => go("cnlesson", {lesson:Number(b.dataset.cn), tab:"list"}));
+    b.onclick = () => go("cnlesson", {lesson:Number(b.dataset.cn), tab:"list", zimode:null}));
   $("#cnall").onclick = () => {
     const qs = buildCnQuiz(CN_ALL, 15);
     app.innerHTML = `${crumb([["首頁","home"],["國語","chinese"]], "大挑戰")}
@@ -1870,24 +1935,28 @@ function renderCnLesson(){
   const l = CN.lessons.find(x => x.n === state.lesson);
   if(!l) return go("subject", {subject:"chinese"});
   const p = pget("cz"+l.n);
-  const tabs = [["list","生詞表"],["cards","閃卡"],["dict","聽寫小考"],["quiz","注音測驗"]];
+  const tabs = l.zi
+    ? [["list","生詞表"],["zi","生字"],["cards","閃卡"],["dict","聽寫小考"],["quiz","注音測驗"]]
+    : [["list","生詞表"],["cards","閃卡"],["dict","聽寫小考"],["quiz","注音測驗"]];
   app.innerHTML = `
     ${crumb([["首頁","home"],["國語","chinese"]], "第 " + l.n + " 課")}
     <div class="page-head">
       <p class="eyebrow" style="margin-bottom:6px">${esc(CN.book)} · 第 ${l.n} 課</p>
-      <h2>第 ${l.n} 課 生詞</h2>
-      <p>${l.words.length} 個生詞，聽寫小考就考這些。</p>
+      <h2>第 ${l.n} 課　${l.title ? esc(l.title) : "生詞"}</h2>
+      <p>${l.words.length} 個生詞${l.zi ? `、${l.zi.length} 個生字` : ""}，聽寫小考就考這些。</p>
     </div>
     <div class="tabs" role="tablist">${tabs.map(t =>
       `<button role="tab" data-tab="${t[0]}" aria-selected="${state.tab===t[0]}">${t[1]}</button>`).join("")}</div>
     <div id="panel"></div>
     ${footer()}`;
   bindCrumb();
-  app.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { state.tab = b.dataset.tab; renderCnLesson(); });
+  app.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { state.tab = b.dataset.tab; state.zimode = null; renderCnLesson(); });
   const panel = $("#panel");
+  const hardWords = cnHardWords(l);
   if(state.tab === "list"){
     panel.innerHTML = `<div class="wordlist compact">${l.words.map(w =>
-      `<div class="word"><span class="w-en" style="font-family:var(--font-zh)">${esc(w)}</span>
+      `<div class="word ${hardWords.indexOf(w) >= 0 ? "hard" : ""}"><span class="w-en" style="font-family:var(--font-zh)">${esc(w)}</span>
+       ${hardWords.indexOf(w) >= 0 ? '<span class="wtag">易錯</span>' : ""}
        <button class="speak" data-zh="${esc(w)}" aria-label="唸出 ${esc(w)}">🔊</button></div>`).join("")}</div>
       <div class="btn-row" style="margin-top:18px">
         <button class="btn small" id="all">🔊 全部唸一遍</button>
@@ -1897,9 +1966,11 @@ function renderCnLesson(){
     $("#all").onclick = () => speakZh(l.words.join("，"));
     $("#mark").onclick = () => { pset("cz"+l.n, {read:!p.read}); renderCnLesson(); };
   }
+  if(state.tab === "zi") renderZi(panel, l);
   if(state.tab === "cards") makeCnCards(panel, l.words, () => { pset("cz"+l.n, {cards:true}); toast("閃卡看完了！"); });
   if(state.tab === "dict") runDictation(panel, l.words,
-      sc => pset("cz"+l.n, {dict:Math.max(p.dict||0, sc)}), () => { state.tab="list"; renderCnLesson(); });
+      sc => pset("cz"+l.n, {dict:Math.max(p.dict||0, sc)}), () => { state.tab="list"; renderCnLesson(); },
+      {must: hardWords});
   if(state.tab === "quiz")
     runQuiz(panel, buildCnQuiz(l.words, 10), `第 ${l.n} 課注音測驗`,
       sc => pset("cz"+l.n, {quiz:Math.max(p.quiz||0, sc)}), () => { state.tab="list"; renderCnLesson(); });
@@ -1937,8 +2008,16 @@ function makeCnCards(panel, words, onComplete){
 }
 
 /* 聽寫小考：播音 → 寫在紙上 → 看答案 → 自評 */
-function runDictation(panel, words, onDone, onBack){
-  const list = shuffle(words).slice(0, Math.min(10, words.length));
+function runDictation(panel, words, onDone, onBack, opt){
+  opt = opt || {};
+  const say = opt.say || (w => w);
+  const show = opt.show || (w => `<div style="text-align:center; font-size:30px; font-weight:700; margin:8px 0 18px">${esc(w)}</div>`);
+  const label = opt.label || "聽寫小考";
+  const prompt = opt.prompt || "聽語音，把這個詞寫在紙上。";
+  const n = Math.min(opt.count || 10, words.length);
+  const must = (opt.must || []).filter(w => words.indexOf(w) >= 0).slice(0, n);
+  const rest = shuffle(words.filter(w => must.indexOf(w) < 0)).slice(0, n - must.length);
+  const list = shuffle(must.concat(rest));   /* 易錯的一定會考到 */
   let i = 0, right = 0; const wrong = [];
   panel.innerHTML = `<div class="quiz">
     <div class="qprog"><span class="bar"><i id="dbar" style="width:0%"></i></span><span id="dnum"></span></div>
@@ -1949,21 +2028,21 @@ function runDictation(panel, words, onDone, onBack){
     const w = list[i];
     bar.style.width = (i / list.length * 100) + "%";
     num.textContent = (i+1) + "/" + list.length;
-    card.innerHTML = `<div class="qkind">聽寫小考</div>
-      <p class="qtext">聽語音，把這個詞寫在紙上。</p>
+    card.innerHTML = `<div class="qkind">${esc(label)}</div>
+      <p class="qtext">${esc(prompt)}</p>
       <div class="btn-row" style="justify-content:center; margin-bottom:16px">
         <button class="btn primary" id="play">🔊 再聽一次</button>
       </div>
       <div id="ans" hidden>
-        <div style="text-align:center; font-size:30px; font-weight:700; margin:8px 0 18px">${esc(w)}</div>
+        ${show(w)}
         <div class="btn-row">
           <button class="btn" id="ok" style="flex:1">我寫對了</button>
           <button class="btn" id="no" style="flex:1">我寫錯了</button>
         </div>
       </div>
       <div class="btn-row" id="revealRow"><button class="btn wide" id="reveal">看答案</button></div>`;
-    speakZh(w);
-    $("#play").onclick = () => speakZh(w);
+    speakZh(say(w));
+    $("#play").onclick = () => speakZh(say(w));
     $("#reveal").onclick = () => { $("#ans").hidden = false; $("#revealRow").hidden = true; };
     $("#ok").onclick = () => { right++; next(); };
     $("#no").onclick = () => { wrong.push(w); next(); };
@@ -1974,21 +2053,149 @@ function runDictation(panel, words, onDone, onBack){
     const score = Math.round(right / list.length * 100);
     bar.style.width = "100%"; num.textContent = list.length + "/" + list.length;
     onDone(score);
-    card.innerHTML = `<div class="result"><div class="qkind">聽寫小考</div>
+    card.innerHTML = `<div class="result"><div class="qkind">${esc(label)}</div>
       <div class="big">${score}<span style="font-size:22px">分</span></div>
       <p class="msg">寫對 ${right} / ${list.length} 個。${wrong.length ? "下面這幾個再練一次：" : "全部都對，太棒了！"}</p>
       </div>
       ${wrong.length ? `<div class="wordlist" style="margin-top:4px">${wrong.map(w =>
         `<div class="word"><span class="w-en" style="font-family:var(--font-zh)">${esc(w)}</span>
-         <button class="speak" data-zh="${esc(w)}">🔊</button></div>`).join("")}</div>` : ""}
+         <button class="speak" data-zh="${esc(say(w))}">🔊</button></div>`).join("")}</div>` : ""}
       <div class="btn-row" style="justify-content:center; margin-top:18px">
         <button class="btn primary" id="ag">再考一次</button>
-        <button class="btn" id="bk">回生詞表</button></div>`;
+        <button class="btn" id="bk">回上一頁</button></div>`;
     bindSpeakZh(card);
-    $("#ag").onclick = () => runDictation(panel, words, onDone, onBack);
+    $("#ag").onclick = () => runDictation(panel, words, onDone, onBack, opt);
     $("#bk").onclick = onBack;
   }
   draw();
+}
+
+/* ============================================================
+   國語生字：田字格生字卡 / 部首筆畫測驗 / 生字聽寫
+   ============================================================ */
+function cnHardWords(l){
+  const hard = Object.keys(l.hard || {});
+  return l.words.filter(w => hard.some(c => w.indexOf(c) >= 0));
+}
+function ziWordsOf(l, c){
+  const ws = l.words.filter(w => w.indexOf(c) >= 0);
+  return ws.length ? ws : ((l.ex || {})[c] ? [l.ex[c]] : []);
+}
+function ziFlag(l, c){ return (l.hard || {})[c] ? "hard" : (l.warn || {})[c] ? "warn" : ""; }
+
+/* 直排注音欄（放在田字格右邊，跟作業簿一樣） */
+function zyCol(reading){
+  const parts = zySplit(reading), sym = parts[0], tone = parts[1];
+  const s = sym.split("").map(g => `<i>${esc(g)}</i>`).join("");
+  const t = tone ? `<span class="zy-t">${esc(tone)}</span>` : "";
+  return tone === "˙"
+    ? `<span class="zy-r light">${t}<span class="zy-s">${s}</span></span>`
+    : `<span class="zy-r"><span class="zy-s">${s}</span>${t}</span>`;
+}
+function ziBox(c, reading){
+  return `<div class="zrow"><div class="zbox" data-nozy><span class="zc">${esc(c)}</span></div>
+    ${zyOn ? `<div class="zzy" aria-hidden="true">${zyCol(reading)}</div>` : ""}</div>`;
+}
+function ziCard(l, z){
+  const flag = ziFlag(l, z[0]);
+  const note = flag === "hard" ? l.hard[z[0]] : flag === "warn" ? l.warn[z[0]] : "";
+  const words = ziWordsOf(l, z[0]);
+  const fromEx = !l.words.some(w => w.indexOf(z[0]) >= 0) && words.length;
+  return `<div class="zi ${flag ? "hard" : ""}">
+    ${flag ? `<span class="hardtag" title="${esc(note)}">${flag === "hard" ? "易錯" : "注意筆畫"}</span>` : ""}
+    ${ziBox(z[0], z[1])}
+    <dl class="zmeta">
+      <dt>部首</dt><dd><span class="zbu">${esc(z[2])}</span></dd>
+      <dt>筆畫</dt><dd>${z[4]} 畫</dd>
+    </dl>
+    ${flag === "warn" ? `<p class="zwarn">${esc(note)}</p>` : ""}
+    <div class="zfoot">
+      <span class="zw">${fromEx ? "例：" : ""}${esc(words.join("、"))}</span>
+      <button class="speak" data-zh="${esc(ziSay(l, z[0]))}" aria-label="唸出 ${esc(z[0])}">🔊</button>
+    </div>
+  </div>`;
+}
+/* 老師報生字的說法：「塊，方塊的塊」 */
+function ziSay(l, c){
+  const w = ziWordsOf(l, c)[0];
+  return w ? `${c}，${w}的${c}` : c;
+}
+
+function renderZi(panel, l){
+  const p = pget("cz"+l.n);
+  const back = () => { state.zimode = null; renderCnLesson(); };
+
+  if(state.zimode === "quiz"){
+    runMathDrill(panel, ziGen(l), 10, "部首筆畫測驗",
+      sc => pset("cz"+l.n, {zq:Math.max(pget("cz"+l.n).zq||0, sc)}), back);
+    return;
+  }
+  if(state.zimode === "dict"){
+    const chars = l.zi.map(z => z[0]);
+    runDictation(panel, chars, sc => pset("cz"+l.n, {zd:Math.max(pget("cz"+l.n).zd||0, sc)}), back, {
+      label:"生字聽寫", prompt:"聽老師報字，把這個生字寫在紙上。",
+      say: c => ziSay(l, c),
+      must: Object.keys(l.hard || {}).concat(Object.keys(l.warn || {})),
+      show: c => {
+        const z = l.zi.find(x => x[0] === c);
+        return `<div class="reveal-zi">${ziBox(c, z[1])}
+          <div class="muted">部首 <b class="kai" style="font-size:18px">${esc(z[2])}</b>　·　${z[4]} 畫</div></div>`;
+      }
+    });
+    return;
+  }
+
+  const flagged = Object.keys(l.hard || {}).map(c => `「${esc(c)}」${esc(l.hard[c])}`)
+    .concat(Object.keys(l.warn || {}).map(c => `「${esc(c)}」${esc(l.warn[c])}`));
+  panel.innerHTML = `
+    <div class="zi-actions">
+      <button class="btn primary" id="zq">部首筆畫測驗（10 題）</button>
+      <button class="btn" id="zd">生字聽寫</button>
+      <button class="btn small" id="zall">🔊 全部報一遍</button>
+    </div>
+    ${p.zq != null || p.zd != null ? `<p class="muted" style="margin:-6px 0 14px">
+      ${p.zq != null ? `部首筆畫測驗最佳 ${p.zq} 分` : ""}${p.zq != null && p.zd != null ? "　·　" : ""}${p.zd != null ? `生字聽寫最佳 ${p.zd} 分` : ""}</p>` : ""}
+    ${flagged.length ? `<div class="note" style="margin-bottom:14px">
+      <b>要特別注意：</b>${flagged.join("；")}。生字聽寫和測驗都會特別多考這幾個字。</div>` : ""}
+    <div class="zi-grid">${l.zi.map(z => ziCard(l, z)).join("")}</div>
+    <p class="muted" style="margin-top:16px">部首與筆畫照作業簿抄寫，筆畫數是台灣教育部的算法（例如「芝」8 畫、「遊」13 畫），跟大陸的算法不同。</p>`;
+  bindSpeakZh(panel);
+  $("#zq").onclick = () => { state.zimode = "quiz"; renderCnLesson(); };
+  $("#zd").onclick = () => { state.zimode = "dict"; renderCnLesson(); };
+  $("#zall").onclick = () => speakZh(l.zi.map(z => ziSay(l, z[0])).join("。"));
+}
+
+/* 部首筆畫測驗：四種題型輪流出 */
+function ziGen(l){
+  const zi = l.zi, warn = Object.keys(l.warn || {});
+  return () => {
+    if(warn.length && Math.random() < 0.25){
+      const z = zi.find(x => x[0] === warn[rnd(0, warn.length-1)]);
+      return {type:"num", q:`「<b>${esc(z[0])}</b>」一共有幾畫？`, ans:z[4],
+        why:`「${z[0]}」一共 ${z[4]} 畫。${l.warn[z[0]]}`};
+    }
+    const z = zi[rnd(0, zi.length-1)];
+    const k = rnd(0, 3);
+    if(k === 0){
+      let opts = [z[2]].concat(shuffle(BU_POOL.filter(b => b !== z[2])).slice(0, 3));
+      if(z[2] === "囗" && opts.indexOf("口") < 0) opts[3] = "口";      /* 囗、口 最常搞混 */
+      return {type:"choice", q:`「<b>${esc(z[0])}</b>」的部首是哪一個？`, opts, ans:z[2],
+        why:`「${z[0]}」的部首是「${z[2]}」（${z[3]}）。`};
+    }
+    if(k === 1){
+      return {type:"num", q:`「<b>${esc(z[0])}</b>」一共有幾畫？`, ans:z[4],
+        why:`「${z[0]}」一共 ${z[4]} 畫。`};
+    }
+    if(k === 2){
+      const names = Array.from(new Set(ALL_ZI.map(x => x[3]).concat(["ㄇㄨˋ","ㄏㄨㄛˇ","ㄖˋ","ㄒㄧㄣ","ㄓㄨˊ"])))
+        .filter(nm => nm !== z[3]);
+      return {type:"choice", q:`部首「<b data-nozy class="kai">${esc(z[2])}</b>」怎麼念？`,
+        opts:[z[3]].concat(shuffle(names).slice(0, 3)), ans:z[3], why:`「${z[2]}」念作 ${z[3]}。`};
+    }
+    const others = shuffle(zi.filter(x => x[2] !== z[2])).slice(0, 3).map(x => x[0]);
+    return {type:"choice", q:`哪一個字的部首是「<b class="kai">${esc(z[2])}</b>」？`,
+      opts:[z[0]].concat(others), ans:z[0], why:`「${z[0]}」的部首是「${z[2]}」。`};
+  };
 }
 
 /* 注音測驗：注音↔生詞 雙向 */
@@ -2472,10 +2679,11 @@ function renderProgress(){
     const pill = v => v == null ? `<span class="pill no">未做</span>`
       : `<span class="pill ${v>=80?"ok":v>=60?"mid":"no"}">${v}</span>`;
     return `<tr>
-      <td><strong>第 ${l.n} 課</strong><div class="muted">${l.words.length} 個生詞</div></td>
+      <td><strong>第 ${l.n} 課</strong><div class="muted">${l.title ? esc(l.title) + " · " : ""}${l.words.length} 個生詞</div></td>
       <td>${p.read ? `<span class="pill ok">念熟</span>` : `<span class="pill no">還沒</span>`}</td>
       <td>${p.cards ? `<span class="pill ok">看完</span>` : `<span class="pill no">未做</span>`}</td>
       <td>${pill(p.dict)}</td><td>${pill(p.quiz)}</td>
+      <td>${l.zi ? `${pill(p.zq)} ${pill(p.zd)}` : `<span class="muted">—</span>`}</td>
       <td class="num"><span class="stars">${"★".repeat(sc)}${"☆".repeat(4-sc)}</span></td></tr>`;
   }).join("");
 
@@ -2512,7 +2720,7 @@ function renderProgress(){
       <thead><tr><th>單元</th><th>重點</th><th>閃卡</th><th>測驗</th><th>拼字</th><th style="text-align:right">星星</th></tr></thead>
       <tbody>${urows}</tbody></table></div></div>
     <div class="sec"><h3>國語 生詞（二上）</h3><div class="scroll-x"><table class="ptable">
-      <thead><tr><th>課次</th><th>念熟</th><th>閃卡</th><th>聽寫</th><th>測驗</th><th style="text-align:right">星星</th></tr></thead>
+      <thead><tr><th>課次</th><th>念熟</th><th>閃卡</th><th>聽寫</th><th>測驗</th><th>生字（測驗·聽寫）</th><th style="text-align:right">星星</th></tr></thead>
       <tbody>${crows}</tbody></table></div></div>
     <div class="sec"><h3>數學</h3><div class="scroll-x"><table class="ptable">
       <thead><tr><th>單元</th><th>重點</th><th>練過的題型</th><th>模擬小考</th><th style="text-align:right">星星</th></tr></thead>
